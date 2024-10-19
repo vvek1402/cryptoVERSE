@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import ExchangeLanding from "./pages/ExchangeLanding";
 import CryptoDetailsLanding from "./pages/CryptoDetailsLanding";
 import Wallet from "./components/Wallet/Wallet";
+import { NotFound } from "./components/Layout/NotFound";
 
 export const routes = [
   {
@@ -42,6 +43,10 @@ export const routes = [
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];
 

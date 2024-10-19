@@ -12,7 +12,7 @@ export const useWalletStore = create<WalletState>((set) => ({
     set((state) => {
       const existingCoin = state.coins.find((c) => c.id === coin.id);
       const updatedCoins = existingCoin
-        ? state.coins.map((c) =>
+        ? state.coins.map((c : any) =>
             c.id === coin.id ? { ...c, amount: c.amount + coin.amount } : c
           )
         : [...state.coins, coin];
@@ -35,7 +35,7 @@ export const useWalletStore = create<WalletState>((set) => ({
   removeCoin: (id, quantity) =>
     set((state) => {
       const updatedCoins = state.coins
-        .map((coin) =>
+        .map((coin : any) =>
           coin.id === id ? { ...coin, amount: coin.amount - quantity } : coin
         )
         .filter((coin) => coin.amount > 0);
