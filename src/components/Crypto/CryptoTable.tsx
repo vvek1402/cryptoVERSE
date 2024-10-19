@@ -45,7 +45,7 @@ const CryptoTable = () => {
           setCryptoData((prevData) => [...prevData, ...newData]);
         }
 
-        if (newData.length < 19) {
+        if (newData.length < limit) {
           setMoreData(false);
         }
       },

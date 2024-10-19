@@ -77,8 +77,8 @@ export function Stats({ details }: { details: CryptoData }) {
     <SimpleGrid
       cols={3}
       breakpoints={[
-        { maxWidth: 980, cols: 2 },  // 2 columns for medium screens
-        { maxWidth: 600, cols: 1 },  // 1 column for small screens
+        { maxWidth: 980, cols: 2 },
+        { maxWidth: 600, cols: 1 },
       ]}
     >
       {statsElements}

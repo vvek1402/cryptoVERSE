@@ -31,9 +31,12 @@ const CryptoDetail = () => {
   });
 
   const { data: details, isLoading: loadingDetails } = useQuery(
-    ["cryptoDetails", id],
-    () => fetchCryptoDetails(id)
-  );
+    ["cryptoDetails", { id }],
+    fetchCryptoDetails,
+    {
+      enabled: !!id,
+    }
+  )
 
   if (loadingDetails) {
     return (

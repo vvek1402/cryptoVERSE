@@ -9,35 +9,34 @@ import { formatValueToUsd, formatValueTwoDigit } from "../../../utils/helpers";
 import { queryLimit } from "../../../utils/constants";
 
 export default function MarketTable() {
-  const [marketPage, setMarketPage] = useState(0);
   const [markets, setMarkets] = useState<Market[]>([]);
-  const [hasMoreMarkets, setHasMoreMarkets] = useState(true);
-  const [loadingMoreMarkets, setLoadingMoreMarkets] = useState(false);
   const { id } = useParams() as { id: string };
   const limit = queryLimit;
+  const [offset, setOffset] = useState(0);
+  const [hasMoreMarkets, setHasMoreMarkets] = useState(true);
 
-  const { isLoading: loadingMarkets, error } = useQuery(
-    ["cryptoMarkets", id, marketPage],
-    async () => {
-      setLoadingMoreMarkets(true);
-      const newMarkets = await fetchCryptoMarkets(
-        id,
-        limit,
-        marketPage * limit
-      );
-      if (newMarkets.length < limit) {
+  const {
+    isLoading: loadingMarkets,
+    error,
+    isFetching,
+  } = useQuery(["cryptoData", { id, limit, offset }], fetchCryptoMarkets, {
+    enabled: !!id,
+    keepPreviousData: true,
+    onSuccess: (newData) => {
+      if (offset === 0) {
+        setMarkets(newData);
+      } else {
+        setMarkets((prevMarkets) => [...prevMarkets, ...newData]);
+      }
+
+      if (newData.length < limit) {
         setHasMoreMarkets(false);
       }
-      
-      setMarkets((prevMarkets) => [...prevMarkets, ...newMarkets]);
-      setLoadingMoreMarkets(false);
-      return newMarkets;
     },
-    {
-      enabled: !!id,
-      keepPreviousData: true,
-    }
-  );
+    onError: () => {
+      setHasMoreMarkets(false);
+    },
+  });
   const marketTableData = {
     caption: "Market Data",
     head: ["Market", "Pair", "Price (USD)", "Volume (24H)", "Volume %"],
@@ -48,6 +47,10 @@ export default function MarketTable() {
       `$${formatValueToUsd(market.volumeUsd24Hr).toLocaleString()}`,
       `${formatValueTwoDigit(market.volumePercent).toLocaleString()} %`,
     ]),
+  };
+
+  const loadMore = () => {
+    setOffset((prevOffset) => prevOffset + limit);
   };
 
   if (loadingMarkets) {
@@ -70,9 +73,9 @@ export default function MarketTable() {
       {hasMoreMarkets && (
         <Center>
           <Button
-            onClick={() => setMarketPage((prevPage) => prevPage + 1)}
+            onClick={loadMore}
             style={{ marginTop: "20px" }}
-            loading={loadingMoreMarkets}
+            loading={isFetching}
           >
             View More
           </Button>
