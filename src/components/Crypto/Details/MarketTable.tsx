@@ -44,8 +44,8 @@ export default function MarketTable() {
       market.exchangeId,
       `${market.baseSymbol}/${market.quoteSymbol}`,
       `$${formatValueTwoDigit(market.priceUsd)}`,
-      `$${formatValueToUsd(market.volumeUsd24Hr).toLocaleString()}`,
-      `${formatValueTwoDigit(market.volumePercent).toLocaleString()} %`,
+      `$${formatValueToUsd(market.volumeUsd24Hr)}`,
+      `${formatValueTwoDigit(market.volumePercent)} %`,
     ]),
   };
 
