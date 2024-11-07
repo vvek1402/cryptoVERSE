@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CoinIconProp } from "../../utils/interfaces";
+import { Image } from "@mantine/core";
 
 const CoinIcon = ({ src, alt } : CoinIconProp) => {
   const [imageSrc, setImageSrc] = useState<string>(
@@ -15,13 +16,13 @@ const CoinIcon = ({ src, alt } : CoinIconProp) => {
   };
 
   return (
-    <img
+    <Image
       src={imageSrc}
       alt={alt}
       onError={handleError}
-      width="50"
-      height="50"
-      style={{ objectFit: "cover" }}
+      w="50"
+      h="50"
+      fit="contain"
     />
   );
 };

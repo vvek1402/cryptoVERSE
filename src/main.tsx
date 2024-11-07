@@ -10,16 +10,17 @@ import ExchangeLanding from "./pages/ExchangeLanding";
 import CryptoDetailsLanding from "./pages/CryptoDetailsLanding";
 import Wallet from "./components/Wallet/Wallet";
 import { NotFound } from "./components/Layout/NotFound";
+import WatchList from "./components/WatchList/WatchList";
 
 export const routes = [
-  {
-    path: "/login",
-    element: <Login />,
-  },
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
       {
         path: "/",
         element: <ProtectedRoute />,
@@ -40,13 +41,17 @@ export const routes = [
             path: "wallet",
             element: <Wallet />,
           },
+          {
+            path: "watchlist",
+            element: <WatchList />,
+          },
         ],
       },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
   },
 ];
 

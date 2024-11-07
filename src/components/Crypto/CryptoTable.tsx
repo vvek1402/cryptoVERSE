@@ -11,6 +11,7 @@ import AddModal from "../Wallet/AddModal";
 import { useDebouncedValue } from "@mantine/hooks";
 import CoinIcon from "../Common/CoinIcon";
 import { queryLimit } from "../../utils/constants";
+import { IconBasketPlus, IconBookmark } from "@tabler/icons-react";
 
 const CryptoTable = () => {
   const navigate = useNavigate();
@@ -113,7 +114,15 @@ const CryptoTable = () => {
       >
         {formatValueTwoDigit(crypto.changePercent24Hr)}%
       </span>,
-      <Button onClick={() => handlePurchaseClick(crypto)}>Purchase</Button>,
+      <>
+        <Button onClick={() => handlePurchaseClick(crypto)}>
+          <IconBookmark />
+        </Button>
+        <Button ml={4} onClick={() => handlePurchaseClick(crypto)}>
+          <IconBasketPlus />
+        </Button>
+      </>,
+      ,
     ]),
   };
 
@@ -124,12 +133,7 @@ const CryptoTable = () => {
 
   return (
     <Layout>
-      <Text
-        align="center"
-        size="xl"
-        weight={700}
-        style={{ marginBottom: "20px" }}
-      >
+      <Text ta="center" size="xl" mb="20px" fw="700">
         Cryptocurrency Prices
       </Text>
 
@@ -137,12 +141,12 @@ const CryptoTable = () => {
         placeholder="Search by name or symbol"
         value={search}
         onChange={(e) => setSearch(e.currentTarget.value)}
-        style={{ marginBottom: "20px" }}
+        mb="20px"
       />
 
       <CommonTable data={cryptoTableData} />
 
-      <Center style={{ marginTop: "20px", display: moreData ? "" : "none" }}>
+      <Center mt="20px" display={moreData ? "" : "none"}>
         <Button onClick={loadMore} loading={isFetching}>
           View More
         </Button>

@@ -9,6 +9,7 @@ import {
   Paper,
   SimpleGrid,
   NumberInput,
+  Center,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useWalletStore } from "../../store/wallet.store";
@@ -27,10 +28,13 @@ const Wallet = () => {
     id: "",
     amount: 0,
   });
-  const [sellQuantity, setSellQuantity] = useState(1);
+  const [sellQuantity, setSellQuantity] = useState<number>(1);
 
   const totalValue = useMemo(() => {
-    return coins.reduce((acc, coin : any) => acc + coin.amount * coin.priceUsd, 0);
+    return coins.reduce(
+      (acc, coin: any) => acc + coin.amount * coin.priceUsd,
+      0
+    );
   }, [coins]);
 
   const handleSell = () => {
@@ -52,30 +56,19 @@ const Wallet = () => {
 
   return (
     <Layout>
-      <Text
-        align="center"
-        weight={600}
-        size="xl"
-        style={{ marginBottom: "20px" }}
-      >
+      <Text ta="center" size="xl" mb="20px" fw="700">
         My Wallet
       </Text>
 
-      <SimpleGrid
-        cols={4}
-        breakpoints={[
-          { maxWidth: 980, cols: 2 },
-          { maxWidth: 600, cols: 1 },
-        ]}
-      >
-        {coins.map((coin : any) => {
+      <SimpleGrid cols={{ sm: 1, md: 2, lg: 4 }}>
+        {coins.map((coin: any) => {
           const totalCoinValue = (coin.amount * coin.priceUsd).toFixed(2);
           return (
             <Paper withBorder p="md" radius="md" key={coin.name}>
               <CoinIcon src={coin?.symbol} alt={coin?.name} />
 
-              <Group position="apart" style={{ marginBottom: 5 }}>
-                <Text weight={500}>{coin.name}</Text>
+              <Group style={{ marginBottom: 5 }}>
+                <Text>{coin.name}</Text>
               </Group>
               <Text>
                 Quantity:{" "}
@@ -115,12 +108,10 @@ const Wallet = () => {
         radius="md"
         mt="xl"
       >
-        <Text size="lg" weight={600} align="center">
-          Overall Wallet Total
-        </Text>
-        <Text size="xl" color="blue" align="center" weight={700} mt="sm">
-          ${formatValueToUsd(totalValue.toFixed(2))}
-        </Text>
+          <Text ta="center" fw={700} size="lg">Overall Wallet Total</Text>
+          <Text ta="center" size="xl" color="blue" mt="sm">
+            ${formatValueToUsd(totalValue.toFixed(2))}
+          </Text>
       </Paper>
 
       <Modal
@@ -133,7 +124,7 @@ const Wallet = () => {
         <Text>Quantity Available: {selectedCrypto?.amount}</Text>
         <NumberInput
           defaultValue={sellQuantity}
-          onChange={(val : number) => setSellQuantity(val)}
+          onChange={(val: number) => setSellQuantity(val)}
           placeholder="Enter quantity to sell"
           max={selectedCrypto?.amount}
           min={0}

@@ -3,7 +3,6 @@ import {
   Loader,
   Center,
   Grid,
-  Col,
   Title,
   Button,
   Group,
@@ -36,7 +35,7 @@ const CryptoDetail = () => {
     {
       enabled: !!id,
     }
-  )
+  );
 
   if (loadingDetails) {
     return (
@@ -54,13 +53,16 @@ const CryptoDetail = () => {
   return (
     <>
       <Layout>
-        <Title align="center" style={{ marginBottom: "30px" }}>
-          <CoinIcon src={details.symbol} alt={details.name} />
-          {"  "}
-          {details.name} ({details.symbol})
-        </Title>
+        <Center>
+          <Group mb="30px" ta="center" mx="auto">
+            <CoinIcon src={details.symbol} alt={details.name} />
+            <Title>
+              {details.name} ({details.symbol})
+            </Title>
+          </Group>
+        </Center>
         <Flex justify="flex-end">
-          <Group style={{ marginBottom: "20px" }}>
+          <Group mb="20px">
             <Button onClick={() => handlePurchaseClick(details)}>
               Purchase
             </Button>
@@ -71,12 +73,12 @@ const CryptoDetail = () => {
         </Flex>
         <Stats details={details} />
         <Grid gutter="xl">
-          <Col span={12} md={12}>
+          <Grid.Col span={12}>
             <Chart />
-          </Col>
-          <Col span={12} md={12}>
+          </Grid.Col>
+          <Grid.Col span={12}>
             <MarketTable />
-          </Col>
+          </Grid.Col>
         </Grid>
         <AddModal
           opened={opened}

@@ -48,7 +48,7 @@ export function LoginForm() {
 
   return (
     <Center style={{ height: "100vh" }}>
-      <Box sx={{ width: 400 }}>
+      <Box>
         <Paper radius="md" p="xl" withBorder>
           <Text size="lg" fw={500}>
             Welcome to CryptoVERSE,

@@ -5,6 +5,7 @@ import { notifications } from "@mantine/notifications";
 import CoinIcon from "../Common/CoinIcon";
 import { formatValueTwoDigit } from "../../utils/helpers";
 import { CryptoSelected } from "../../utils/interfaces";
+import CryptoPrice from "../Common/CryptoPrice";
 
 export default function AddModal({
   opened,
@@ -43,7 +44,14 @@ export default function AddModal({
       title={`Purchase : ${selectedCrypto?.name}`}
     >
       <CoinIcon src={selectedCrypto?.symbol} alt={selectedCrypto?.name} />
-      <Text>Price: ${formatValueTwoDigit(selectedCrypto?.priceUsd)}</Text>
+      <Text>
+        Price:{" "}
+        {selectedCrypto?.name ? (
+          <CryptoPrice assets={[(selectedCrypto.name.toLowerCase())]} defaultPrice={selectedCrypto?.pi} />
+        ) : (
+          ""
+        )}
+      </Text>
       <NumberInput
         defaultValue={quantity}
         onChange={(val: number) => setQuantity(val)}

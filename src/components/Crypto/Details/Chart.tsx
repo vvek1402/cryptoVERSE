@@ -1,16 +1,4 @@
 import React, { memo, useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-} from "chart.js";
 import {
   Loader,
   Button,
@@ -23,55 +11,29 @@ import {
 } from "@mantine/core";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { calculateDateRange } from "../../../utils/helpers";
+import { calculateDateRange, formatValueTwoDigit } from "../../../utils/helpers";
 import { fetchCryptoHistory } from "../../../services/APIService";
 import { CryptoHistoryResponse, History } from "../../../utils/interfaces";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { AreaChart } from "@mantine/charts";
 
 const ChartComponent = ({ data }: CryptoHistoryResponse) => {
-  const chartData = {
-    labels: data.map((item) => new Date(item.time).toLocaleDateString()),
-    datasets: [
-      {
-        label: "Price (USD)",
-        data: data.map((item) => parseFloat(item.priceUsd)),
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderWidth: 2,
-        fill: true,
-        tension: 0.1,
-      },
-    ],
-  };
+  const chartData = data.map((item) => ({
+    date: new Date(item.time).toLocaleDateString(),
+    price: formatValueTwoDigit(item.priceUsd),
+  }));
 
-  const chartOptions: ChartOptions<'line'> = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "Price Over Time" },
-    },
-    scales: {
-      x: { 
-        type: "category", 
-        title: { display: true, text: "Date" } 
-      },
-      y: { 
-        title: { display: true, text: "Price (USD)" }, 
-        beginAtZero: false 
-      },
-    },
-  };
-
-  return <Line data={chartData} options={chartOptions} />;
+  return (
+    <AreaChart
+      h={300}
+      data={chartData}
+      dataKey="date"
+      unit="$"
+      dotProps={{ r: 2, strokeWidth: 1 }}
+      activeDotProps={{ r: 3, strokeWidth: 1 }}
+      withGradient
+      series={[{ name: "price", color: "teal" }]}
+    />
+  );
 };
 
 const Chart = () => {
@@ -135,13 +97,16 @@ const Chart = () => {
       ? (((prices[prices.length - 1] - prices[0]) / prices[0]) * 100).toFixed(2)
       : "N/A";
 
+  const statItems = [
+    { label: "High (USD)", value: high },
+    { label: "Low (USD)", value: low },
+    { label: "Average (USD)", value: average },
+    { label: "Change (%)", value: change },
+  ];
+
   return (
     <div>
-      <Text
-        weight={600}
-        size="lg"
-        style={{ marginBottom: "10px", marginTop: "30px" }}
-      >
+      <Text size="lg" style={{ marginBottom: "10px", marginTop: "30px" }}>
         Historical Prices
       </Text>
       <Card
@@ -150,48 +115,20 @@ const Chart = () => {
         radius="md"
         style={{ backgroundColor: "#f9fafb" }}
       >
-        <SimpleGrid
-          cols={4}
-          breakpoints={[
-            { maxWidth: 980, cols: 2 },
-            { maxWidth: 600, cols: 1 },
-          ]}
-        >
-          <Paper withBorder p="md" radius="md">
-            <Text c="dimmed" tt="uppercase" fw={500} fz="xs">
-              High (USD):{" "}
-            </Text>
-            <Text fw={500} fz="md">
-              {high}
-            </Text>
-          </Paper>
-          <Paper withBorder p="md" radius="md">
-            <Text c="dimmed" tt="uppercase" fw={500} fz="xs">
-              LOW (USD):{" "}
-            </Text>
-            <Text fw={500} fz="md">
-              {low}
-            </Text>
-          </Paper>
-          <Paper withBorder p="md" radius="md">
-            <Text c="dimmed" tt="uppercase" fw={500} fz="xs">
-              Average (USD):{" "}
-            </Text>
-            <Text fw={500} fz="md">
-              {average}
-            </Text>
-          </Paper>
-          <Paper withBorder p="md" radius="md">
-            <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
-              Change %:{" "}
-            </Text>
-            <Text fw={500} fz="md">
-              {change}
-            </Text>
-          </Paper>
+        <SimpleGrid mb={20} cols={{ sm: 1, md: 2, lg: 4 }}>
+          {statItems.map((stat, index) => (
+            <Paper withBorder p="md" radius="md" key={index}>
+              <Text c="dimmed" tt="uppercase" fw={500} fz="xs">
+                {stat.label}:{" "}
+              </Text>
+              <Text fw={500} fz="md">
+                {stat.value}
+              </Text>
+            </Paper>
+          ))}
         </SimpleGrid>
         <ChartComponent data={data} />
-        <Group position="center" style={{ marginTop: "20px" }}>
+        <Group mt="20" ta="center" mx="auto">
           {["1w", "1m", "3m", "6m", "1y"].map((option) => (
             <Button
               key={option}

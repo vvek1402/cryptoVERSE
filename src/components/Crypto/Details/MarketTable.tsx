@@ -38,7 +38,6 @@ export default function MarketTable() {
     },
   });
   const marketTableData = {
-    caption: "Market Data",
     head: ["Market", "Pair", "Price (USD)", "Volume (24H)", "Volume %"],
     body: markets.map((market) => [
       market.exchangeId,
@@ -63,7 +62,7 @@ export default function MarketTable() {
 
   return (
     <Card shadow="md" padding="xl" radius="md">
-      <Text weight={600} size="lg" style={{ marginBottom: "10px" }}>
+      <Text size="lg" style={{ marginBottom: "10px" }}>
         Top Markets
       </Text>
       <Divider style={{ marginBottom: "20px" }} />

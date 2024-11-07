@@ -8,13 +8,14 @@ import {
 import { IconArrowUpRight, IconArrowDownRight } from "@tabler/icons-react";
 import { formatValueToUsd, formatValueTwoDigit } from "../../../utils/helpers";
 import { CryptoData, CryptoStatData } from "../../../utils/interfaces";
+import CryptoPrice from "../../Common/CryptoPrice";
 
 export function Stats({ details }: { details: CryptoData }) {
   const stats = [
     { title: "Rank", value: details.rank, diff: null },
     {
       title: "Price (USD)",
-      value: `$${formatValueTwoDigit(details.priceUsd)}`,
+      value: <CryptoPrice assets={[details.name.toLowerCase()]} defaultPrice={details.priceUsd} />,
       diff: details.changePercent24Hr,
     },
     {
@@ -75,11 +76,7 @@ export function Stats({ details }: { details: CryptoData }) {
 
   return (
     <SimpleGrid
-      cols={3}
-      breakpoints={[
-        { maxWidth: 980, cols: 2 },
-        { maxWidth: 600, cols: 1 },
-      ]}
+      cols={{ sm: 1, md : 2, lg: 4 }}
     >
       {statsElements}
     </SimpleGrid>

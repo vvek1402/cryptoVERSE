@@ -8,6 +8,7 @@ import { useWalletStore } from "../../store/wallet.store";
 const links = [
   { link: "/", label: "Coins" },
   { link: "/exchange", label: "Exchange" },
+  { link: "/watchlist", label: "Watchlist" },
   { link: "/wallet", label: "Wallet" },
 ];
 
@@ -69,7 +70,7 @@ export function Header() {
           className="mobileMenu"
         >
           <ScrollArea>
-            <Group spacing="md" align="center">
+            <Group align="center">
               {items}
             </Group>
             <Button type="button" style={{marginTop : "20px"}} variant="outline" onClick={logout}>

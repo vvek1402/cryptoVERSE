@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Loader,
-  Center,
-  Text,
-  Button,
-} from "@mantine/core";
+import { Loader, Center, Text, Button } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { ExchangeData } from "../../utils/interfaces";
@@ -60,25 +55,20 @@ const ExchangeTable = () => {
   }
 
   const exchangeTableData = {
-    head: ['Rank', 'Name', 'Trading Pairs', 'Volume (24H)', 'Total %'],
-    body: exchangeData.map(exchange => [
+    head: ["Rank", "Name", "Trading Pairs", "Volume (24H)", "Total %"],
+    body: exchangeData.map((exchange) => [
       exchange.rank,
       <Link to={`${exchange.exchangeUrl}`}>{exchange.name}</Link>,
       exchange.tradingPairs,
       formatValueToUsd(exchange.volumeUsd),
-      formatValueTwoDigit(exchange.percentTotalVolume) + '%',
+      formatValueTwoDigit(exchange.percentTotalVolume) + "%",
     ]),
   };
 
   return (
     <>
       <Layout>
-        <Text
-          align="center"
-          size="xl"
-          weight={700}
-          style={{ marginBottom: "20px" }}
-        >
+        <Text ta="center" size="xl" mb="20px" fw="700">
           Exchanges
         </Text>
 
