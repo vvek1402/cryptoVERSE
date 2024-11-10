@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import router from './routes/AuthRoutes'; 
-import db from './config/db.config';
+import router from './src/routes'; 
+import db from './src/config/db.config';
 
 dotenv.config();
 

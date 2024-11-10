@@ -12,14 +12,14 @@ import {
   Center,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useWalletStore } from "../../store/wallet.store";
+import { useHoldingsStore } from "../../store/holdings.store";
 import Layout from "../Layout/Layout";
 import CoinIcon from "../Common/CoinIcon";
 import { CryptoSelected } from "../../utils/interfaces";
 import { formatValueToUsd } from "../../utils/helpers";
 
-const Wallet = () => {
-  const { coins, removeCoin } = useWalletStore();
+const Holdings = () => {
+  const { coins, removeCoin } = useHoldingsStore();
   const [opened, setOpened] = useState(false);
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoSelected>({
     name: "",
@@ -57,7 +57,7 @@ const Wallet = () => {
   return (
     <Layout>
       <Text ta="center" size="xl" mb="20px" fw="700">
-        My Wallet
+        My Holdings
       </Text>
 
       <SimpleGrid cols={{ sm: 1, md: 2, lg: 4 }}>
@@ -108,7 +108,7 @@ const Wallet = () => {
         radius="md"
         mt="xl"
       >
-          <Text ta="center" fw={700} size="lg">Overall Wallet Total</Text>
+          <Text ta="center" fw={700} size="lg">Overall Total</Text>
           <Text ta="center" size="xl" color="blue" mt="sm">
             ${formatValueToUsd(totalValue.toFixed(2))}
           </Text>
@@ -137,4 +137,4 @@ const Wallet = () => {
   );
 };
 
-export default Wallet;
+export default Holdings;

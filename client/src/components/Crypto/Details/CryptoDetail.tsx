@@ -16,7 +16,7 @@ import { Stats } from "./Stats";
 import MarketTable from "./MarketTable";
 import CoinIcon from "../../Common/CoinIcon";
 import { useState } from "react";
-import AddModal from "../../Wallet/AddModal";
+import AddModal from "../../Holdings/AddModal";
 import { CryptoSelected } from "../../../utils/interfaces";
 
 const CryptoDetail = () => {

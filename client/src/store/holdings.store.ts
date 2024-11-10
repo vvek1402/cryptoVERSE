@@ -1,12 +1,12 @@
 import create from "zustand";
-import { WalletState } from "../utils/interfaces";
+import { HoldingsState } from "../utils/interfaces";
 
 const loadStateFromLocalStorage = () => {
-  const storedData = localStorage.getItem("wallet-storage");
+  const storedData = localStorage.getItem("holdings-storage");
   return storedData ? JSON.parse(storedData) : { coins: [], totalQuantity: 0 };
 };
 
-export const useWalletStore = create<WalletState>((set) => ({
+export const useHoldingsStore = create<HoldingsState>((set) => ({
   ...loadStateFromLocalStorage(),
   addCoin: (coin) =>
     set((state) => {
@@ -22,7 +22,7 @@ export const useWalletStore = create<WalletState>((set) => ({
         0
       );
 
-      localStorage.setItem("wallet-storage", JSON.stringify({
+      localStorage.setItem("holdings-storage", JSON.stringify({
         coins: updatedCoins,
         totalQuantity,
       }));
@@ -45,7 +45,7 @@ export const useWalletStore = create<WalletState>((set) => ({
         0
       );
 
-      localStorage.setItem("wallet-storage", JSON.stringify({
+      localStorage.setItem("holdings-storage", JSON.stringify({
         coins: updatedCoins,
         totalQuantity,
       }));

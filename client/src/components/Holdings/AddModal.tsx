@@ -1,11 +1,10 @@
-import { Button, Input, Modal, NumberInput, Text } from "@mantine/core";
-import React, { useState } from "react";
-import { useWalletStore } from "../../store/wallet.store";
+import { Button, Modal, NumberInput, Text } from "@mantine/core";
+import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import CoinIcon from "../Common/CoinIcon";
-import { formatValueTwoDigit } from "../../utils/helpers";
 import { CryptoSelected } from "../../utils/interfaces";
 import CryptoPrice from "../Common/CryptoPrice";
+import { useHoldingsStore } from "../../store/holdings.store";
 
 export default function AddModal({
   opened,
@@ -17,7 +16,7 @@ export default function AddModal({
   setOpened: (bool: boolean) => void;
 }) {
   const [quantity, setQuantity] = useState(0);
-  const addCoin = useWalletStore((state) => state.addCoin);
+  const addCoin = useHoldingsStore((state) => state.addCoin);
 
   const handlePurchase = () => {
     if (selectedCrypto && quantity > 0) {
@@ -47,7 +46,7 @@ export default function AddModal({
       <Text>
         Price:{" "}
         {selectedCrypto?.name ? (
-          <CryptoPrice assets={[(selectedCrypto.name.toLowerCase())]} defaultPrice={selectedCrypto?.pi} />
+          <CryptoPrice assets={[(selectedCrypto.name.toLowerCase())]} defaultPrice={selectedCrypto?.priceUsd} />
         ) : (
           ""
         )}
@@ -60,7 +59,7 @@ export default function AddModal({
         min={0}
       />
       <Button fullWidth mt="md" onClick={handlePurchase}>
-        Purchase
+         Purchase
       </Button>
     </Modal>
   );

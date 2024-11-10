@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5003/api/v1/";
+const API_URL = "http://localhost:5003/api/v1/auth/";
 
 export async function loginUser(data: { email: string; password: string }) {
   const response = await axios.post(API_URL + "login", data);

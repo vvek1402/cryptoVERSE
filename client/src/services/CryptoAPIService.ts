@@ -5,9 +5,9 @@ const API_URL = "https://api.coincap.io/v2/";
 export const fetchCryptoData = async ({
   queryKey,
 }: {
-  queryKey: [string, { search: string; limit: number; offset: number }];
+  queryKey: [string, { search?: string; limit?: number; offset?: number; ids?: string }];
 }) => {
-  const [_key, { search, limit, offset }] = queryKey;
+  const [_key, { search = "", limit = 10, offset = 0, ids = "" }] = queryKey;
 
   let url = `${API_URL}assets?limit=${limit}&offset=${offset}`;
 
@@ -15,9 +15,14 @@ export const fetchCryptoData = async ({
     url += `&search=${search}`;
   }
 
+  if (ids) {
+    url += `&ids=${ids}`;
+  }
+
   const response = await axios.get(url);
   return response.data.data;
 };
+
 
 export const fetchExchangeData = async ({
   queryKey,

@@ -5,15 +5,16 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { CryptoData, CryptoSelected } from "../../utils/interfaces";
 import { fetchCryptoData } from "../../services/CryptoAPIService";
-import Layout from "../Layout/Layout";
 import CommonTable from "../Common/CommonTable";
-import AddModal from "../Wallet/AddModal";
+import AddModal from "../Holdings/AddModal";
 import { useDebouncedValue } from "@mantine/hooks";
 import CoinIcon from "../Common/CoinIcon";
 import { queryLimit } from "../../utils/constants";
 import { IconBasketPlus, IconBookmark } from "@tabler/icons-react";
+import useWatchlistStore from "../../store/watchlist.store";
+import { notifications } from "@mantine/notifications";
 
-const CryptoTable = () => {
+const CryptoTable = ({ ids }: { ids?: string }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,6 +28,9 @@ const CryptoTable = () => {
   const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
   const [moreData, setMoreData] = useState(true);
   const [opened, setOpened] = useState(false);
+  const { addCoin, removeCoin, isInWatchlist } =
+    useWatchlistStore((state) => state);
+
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoSelected>({
     name: "",
     symbol: "",
@@ -35,7 +39,10 @@ const CryptoTable = () => {
   });
 
   const { data, isLoading, error, isFetching, refetch } = useQuery(
-    ["cryptoData", { search: debouncedSearch, limit, offset }],
+    [
+      "cryptoData",
+      { search: debouncedSearch, limit, offset, ...(ids ? { ids } : {}) },
+    ],
     fetchCryptoData,
     {
       keepPreviousData: true,
@@ -115,7 +122,10 @@ const CryptoTable = () => {
         {formatValueTwoDigit(crypto.changePercent24Hr)}%
       </span>,
       <>
-        <Button onClick={() => handlePurchaseClick(crypto)}>
+        <Button
+          onClick={() => handleWatchlistClick(crypto)}
+          color={isInWatchlist(crypto.id) ? "teal" : ""}
+        >
           <IconBookmark />
         </Button>
         <Button ml={4} onClick={() => handlePurchaseClick(crypto)}>
@@ -131,18 +141,35 @@ const CryptoTable = () => {
     setOpened(true);
   };
 
-  return (
-    <Layout>
-      <Text ta="center" size="xl" mb="20px" fw="700">
-        Cryptocurrency Prices
-      </Text>
+  const handleWatchlistClick = (crypto: CryptoSelected) => {
+    if (isInWatchlist(crypto.id)) {
+      removeCoin(crypto.id);
+      notifications.show({
+        title: "Success !!",
+        message: "Coin Removed From Watchlist Successfully",
+      });
+    } else {
+      addCoin(crypto.id, crypto.name);
 
-      <Input
-        placeholder="Search by name or symbol"
-        value={search}
-        onChange={(e) => setSearch(e.currentTarget.value)}
-        mb="20px"
-      />
+      notifications.show({
+        title: "Success !!",
+        message: "Coin Added to Watchlist Successfully",
+      });
+    }
+  };
+
+  return (
+    <>
+      {!ids ? (
+        <Input
+          placeholder="Search by name or symbol"
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          mb="20px"
+        />
+      ) : (
+        <></>
+      )}
 
       <CommonTable data={cryptoTableData} />
 
@@ -157,7 +184,7 @@ const CryptoTable = () => {
         selectedCrypto={selectedCrypto}
         setOpened={setOpened}
       />
-    </Layout>
+    </>
   );
 };
 

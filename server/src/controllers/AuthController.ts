@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { storeUser, getUserByEmail } from "../services/AuthService";
 import { User } from "../utils/interfaces";
+import { handleErrorResponse } from "../utils/helpers";
 
 const generateToken = (userId: string | undefined, email: string): string => {
   return jwt.sign(
@@ -12,11 +13,7 @@ const generateToken = (userId: string | undefined, email: string): string => {
   );
 };
 
-const handleErrorResponse = (res: Response, status: number, message: string): void => {
-  res.status(status).json({ error: message });
-};
-
-export const loginUser = async (req: Request, res: Response): Promise<void> => {
+export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
@@ -33,7 +30,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const registerUser = async (req: Request, res: Response): Promise<void> => {
+export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
 

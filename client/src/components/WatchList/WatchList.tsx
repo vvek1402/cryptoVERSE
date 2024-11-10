@@ -1,10 +1,26 @@
-import React from "react";
+import useWatchlistStore from "../../store/watchlist.store";
 import Layout from "../Layout/Layout";
+import CryptoTable from "../Crypto/CryptoTable";
+import { Text } from "@mantine/core";
 
-export default function WatchList() {
+const Watchlist = () => {
+  const { watchlist } = useWatchlistStore(
+    (state) => ({
+      watchlist: state.watchlist,
+    })
+  );
+
+  const ids = watchlist.map((coin) => coin.assetId).join(",");
+
   return (
     <Layout>
-      <div>WatchList</div>
+      <Text ta="center" size="xl" mb="20px" fw="700">
+        Watchlist
+      </Text>
+
+      <CryptoTable ids={ids} />
     </Layout>
   );
-}
+};
+
+export default Watchlist;

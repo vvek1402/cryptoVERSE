@@ -56,7 +56,7 @@ export interface CryptoSelected {
   amount?: number;
 }
 
-export interface WalletState {
+export interface HoldingsState {
   coins: CryptoSelected[];
   totalQuantity: number;
   addCoin: (coin: CryptoSelected) => void;

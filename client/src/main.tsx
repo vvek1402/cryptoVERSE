@@ -8,9 +8,10 @@ import CryptoLanding from "./pages/CryptoLanding";
 import Login from "./pages/Login";
 import ExchangeLanding from "./pages/ExchangeLanding";
 import CryptoDetailsLanding from "./pages/CryptoDetailsLanding";
-import Wallet from "./components/Wallet/Wallet";
 import { NotFound } from "./components/Layout/NotFound";
 import WatchList from "./components/WatchList/WatchList";
+import Balance from "./components/Balance/Balance";
+import Holdings from "./components/Holdings/Holdings";
 
 export const routes = [
   {
@@ -38,11 +39,19 @@ export const routes = [
             element: <ExchangeLanding />,
           },
           {
-            path: "wallet",
-            element: <Wallet />,
+            path: "balance",
+            element: <Balance />,
           },
           {
             path: "watchlist",
+            element: <WatchList />,
+          },
+          {
+            path: "holdings",
+            element: <Holdings />,
+          },
+          {
+            path: "orders",
             element: <WatchList />,
           },
         ],

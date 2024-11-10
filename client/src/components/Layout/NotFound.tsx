@@ -30,7 +30,6 @@ export function NotFound() {
             to="/"
             size="md"
             mt="xl"
-            style={{ backgroundColor: "#232F53" }}
           >
             Get back to home page
           </Button>
