@@ -1,14 +1,5 @@
 import create from 'zustand';
-
-interface PriceData {
-  [key: string]: string;
-}
-
-interface CryptoStore {
-  prices: PriceData;
-  loading: boolean;
-  connect: (assets: string[]) => void;
-}
+import { CryptoStore } from '../utils/interfaces';
 
 export const useCryptoStore = create<CryptoStore>((set) => ({
   prices: {},

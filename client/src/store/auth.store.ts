@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode"; 
-import { AuthState } from "../utils/interfaces";
-
-interface TokenPayload {
-  exp: number;
-}
+import { AuthState, TokenPayload } from "../utils/interfaces";
 
 const getInitialAuthState = (): boolean => {
   const token = localStorage.getItem("token");

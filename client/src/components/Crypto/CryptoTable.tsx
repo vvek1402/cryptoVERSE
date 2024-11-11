@@ -38,7 +38,7 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
     id: "",
   });
 
-  const { data, isLoading, error, isFetching, refetch } = useQuery(
+  const { isLoading, error, isFetching, refetch } = useQuery(
     [
       "cryptoData",
       { search: debouncedSearch, limit, offset, ...(ids ? { ids } : {}) },

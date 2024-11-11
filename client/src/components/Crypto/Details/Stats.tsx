@@ -6,16 +6,15 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { IconArrowUpRight, IconArrowDownRight } from "@tabler/icons-react";
-import { formatValueToUsd, formatValueTwoDigit } from "../../../utils/helpers";
+import { formatValueToUsd, formatValueTwoDigit, useCryptoPrices } from "../../../utils/helpers";
 import { CryptoData, CryptoStatData } from "../../../utils/interfaces";
-import CryptoPrice from "../../Common/CryptoPrice";
 
 export function Stats({ details }: { details: CryptoData }) {
   const stats = [
     { title: "Rank", value: details.rank, diff: null },
     {
       title: "Price (USD)",
-      value: <CryptoPrice assets={[details.name.toLowerCase()]} defaultPrice={details.priceUsd} />,
+      value: useCryptoPrices(details.name.toLowerCase()),
       diff: details.changePercent24Hr,
     },
     {

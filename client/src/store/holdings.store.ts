@@ -1,58 +1,72 @@
 import create from "zustand";
-import { HoldingsState } from "../utils/interfaces";
+import { CryptoSelected, HoldingsState } from "../utils/interfaces";
+import {
+  addCoinToHoldings,
+  getUserHoldings,
+  removeCoinFromHoldings,
+} from "../services/HoldingsAPIService";
 
-const loadStateFromLocalStorage = () => {
-  const storedData = localStorage.getItem("holdings-storage");
-  return storedData ? JSON.parse(storedData) : { coins: [], totalQuantity: 0 };
-};
+export const useHoldingsStore = create<HoldingsState>((set) => {
+  const store = {
+    coins: [],
+    totalQuantity: 0,
 
-export const useHoldingsStore = create<HoldingsState>((set) => ({
-  ...loadStateFromLocalStorage(),
-  addCoin: (coin) =>
-    set((state) => {
-      const existingCoin = state.coins.find((c) => c.id === coin.id);
-      const updatedCoins = existingCoin
-        ? state.coins.map((c : any) =>
-            c.id === coin.id ? { ...c, amount: c.amount + coin.amount } : c
-          )
-        : [...state.coins, coin];
+    fetchUserHoldings: async () => {
+      try {
+        const holdings = await getUserHoldings();
+        const totalQuantity = holdings.coins.reduce(
+          (acc: number, coin: any) => acc + coin.amount,
+          0
+        );
 
-      const totalQuantity = updatedCoins.reduce(
-        (acc, coin) => acc + coin.amount,
-        0
-      );
+        set({
+          coins: holdings.coins,
+          totalQuantity,
+        });
+      } catch (error) {
+        console.error("Error fetching holdings:", error);
+      }
+    },
 
-      localStorage.setItem("holdings-storage", JSON.stringify({
-        coins: updatedCoins,
-        totalQuantity,
-      }));
+    addCoin: async (coin: CryptoSelected, totalValue: number) => {
+      try {
+        const response = await addCoinToHoldings(coin, -totalValue);
+        const updatedCoins = response.holdings.coins;
 
-      return {
-        coins: updatedCoins,
-        totalQuantity,
-      };
-    }),
-  removeCoin: (id, quantity) =>
-    set((state) => {
-      const updatedCoins = state.coins
-        .map((coin : any) =>
-          coin.id === id ? { ...coin, amount: coin.amount - quantity } : coin
-        )
-        .filter((coin) => coin.amount > 0);
+        const totalQuantity = updatedCoins.reduce(
+          (acc: number, coin: any) => acc + coin.amount,
+          0
+        );
 
-      const totalQuantity = updatedCoins.reduce(
-        (acc, coin) => acc + coin.amount,
-        0
-      );
+        set({
+          coins: updatedCoins,
+          totalQuantity,
+        });
+      } catch (error) {
+        console.error("Error adding coin:", error);
+      }
+    },
 
-      localStorage.setItem("holdings-storage", JSON.stringify({
-        coins: updatedCoins,
-        totalQuantity,
-      }));
+    removeCoin: async (coinId: string, quantity: number, totalValue: number) => {
+      try {
+        const response = await removeCoinFromHoldings(coinId, quantity, totalValue);
+        const updatedCoins = response.holdings.coins;
 
-      return {
-        coins: updatedCoins,
-        totalQuantity,
-      };
-    }),
-}));
+        const totalQuantity = updatedCoins.reduce(
+          (acc: number, coin: any) => acc + coin.amount,
+          0
+        );
+
+        set({
+          coins: updatedCoins,
+          totalQuantity,
+        });
+      } catch (error) {
+        console.error("Error removing coin:", error);
+      }
+    },
+  };
+
+  store.fetchUserHoldings();
+  return store;
+});

@@ -1,14 +1,14 @@
 import { Response } from "express";
 import { addToWatchlist, removeFromWatchlist, getWatchlistByUser } from "../services/WatchlistService";
 import { handleErrorResponse } from "../utils/helpers";
-import { CustomRequest } from "src/utils/interfaces";
+import { CustomRequest } from "../utils/interfaces";
 
 export const addWatchlistItem = async (req: CustomRequest, res: Response) => {
   try {
-    const { assetId, assetName } = req.body;
+    const { coinId, coinName } = req.body;
     const userId = req.userid; 
 
-    const watchlist = await addToWatchlist(userId, assetId, assetName);
+    const watchlist = await addToWatchlist(userId, coinId, coinName);
     res.status(200).json(watchlist);
   } catch (err: unknown) {
     console.error("Server error:", err);
@@ -17,10 +17,10 @@ export const addWatchlistItem = async (req: CustomRequest, res: Response) => {
 
 export const removeWatchlistItem = async (req: CustomRequest, res: Response) => {
   try {
-    const { assetId } = req.body;
+    const { coinId } = req.body;
     const userId = req.userid;
 
-    const watchlist = await removeFromWatchlist(userId, assetId);
+    const watchlist = await removeFromWatchlist(userId, coinId);
     res.status(200).json(watchlist);
   } catch (err: unknown) {
     console.error("Server error:", err);

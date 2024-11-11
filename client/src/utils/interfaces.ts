@@ -59,9 +59,8 @@ export interface CryptoSelected {
 export interface HoldingsState {
   coins: CryptoSelected[];
   totalQuantity: number;
-  addCoin: (coin: CryptoSelected) => void;
-  removeCoin: (id: string, quantity: number) => void;
-  symbol: string;
+  addCoin: (coin: CryptoSelected, totalValue : number) => void;
+  removeCoin: (id: string, quantity: number, totalValue : number) => void;
 }
 
 export interface TableData {
@@ -81,4 +80,47 @@ export interface CoinIconProp
 
 export interface CryptoHistoryResponse {
   data: History[];
+}
+
+export interface WatchlistStore {
+  watchlist: { coinId: string; coinName: string }[];
+  fetchWatchlist: () => Promise<void>;
+  addCoin: (coinId: string, coinName: string) => Promise<void>;
+  removeCoin: (coinId: string) => Promise<void>;
+  isInWatchlist: (cryptoId: string) => boolean;
+}
+
+export interface PriceData {
+  [key: string]: string;
+}
+
+export interface CryptoStore {
+  prices: PriceData;
+  loading: boolean;
+  connect: (assets: string[]) => void;
+}
+
+export interface PaymentLog {
+  addedAmount: number;
+  createdAt: string;
+  userId: string;
+}
+
+export interface TokenPayload {
+  exp: number;
+}
+
+export interface BalanceStore {
+  balance: number;
+  fetchBalance: () => Promise<void>;
+  addBalance: (amount: number) => Promise<void>;
+  withdrawBalance: (amount: number) => Promise<void>;
+}
+
+export interface OrdersLog {
+  totalPrice: number;
+  createdAt: string;
+  orderType: string;
+  coinName : string;
+  amount : number
 }

@@ -8,10 +8,14 @@ import {
   Center,
   Paper,
   SimpleGrid,
+  Divider,
 } from "@mantine/core";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { calculateDateRange, formatValueTwoDigit } from "../../../utils/helpers";
+import {
+  calculateDateRange,
+  formatValueTwoDigit,
+} from "../../../utils/helpers";
 import { fetchCryptoHistory } from "../../../services/CryptoAPIService";
 import { CryptoHistoryResponse, History } from "../../../utils/interfaces";
 import { AreaChart } from "@mantine/charts";
@@ -106,14 +110,11 @@ const Chart = () => {
 
   return (
     <div>
-      <Text size="lg" style={{ marginBottom: "10px", marginTop: "30px" }}>
-        Historical Prices
-      </Text>
-      <Card
-        shadow="md"
-        padding="xl"
-        radius="md"
-      >
+      <Card shadow="md" padding="xl" radius="md" mt="20">
+        <Text size="lg" style={{ marginBottom: "10px" }}>
+          Historical Prices
+        </Text>
+        <Divider style={{ marginBottom: "20px" }} />
         <SimpleGrid mb={20} cols={{ sm: 1, md: 2, lg: 4 }}>
           {statItems.map((stat, index) => (
             <Paper withBorder p="md" radius="md" key={index}>

@@ -16,12 +16,12 @@ import { useAuthStore } from "../../store/auth.store";
 import { useHoldingsStore } from "../../store/holdings.store";
 import { DarkMode } from "./DarkMode";
 import { useBalanceStore } from "../../store/balance.store";
+import { formatValueTwoDigit } from "../../utils/helpers";
 
 const links = [
   { link: "/", label: "Coins" },
   { link: "/exchange", label: "Exchange" },
   { link: "/watchlist", label: "Watchlist" },
-  { link: "/balance", label: "Balance" },
   { link: "/holdings", label: "Holdings" },
   { link: "/orders", label: "Orders" },
 ];
@@ -68,8 +68,8 @@ export function Header() {
 
         <Group className="linksContainer desktopLinks">
           <DarkMode />
-          <Button type="button" variant="outline">
-            Balance : ${balance}
+          <Button component={Link} to="/balance" type="button" variant="outline">
+            Balance : ${formatValueTwoDigit(balance.toFixed(2))}
           </Button>
           <Button type="button" variant="outline" onClick={logout}>
             Logout

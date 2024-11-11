@@ -1,12 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { WatchlistDocument } from "src/utils/interfaces";
+import { WatchlistDocument } from "../utils/interfaces";
 
 const watchlistSchema = new Schema<WatchlistDocument>({
   userId: { type: String, required: true, unique: true },
   items: [
     {
-      assetId: { type: String, required: true },
-      assetName: { type: String, required: true },
+      coinId: { type: String, required: true },
+      coinName: { type: String, required: true },
     },
   ],
 });

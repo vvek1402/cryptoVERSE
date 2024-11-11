@@ -18,8 +18,8 @@ export interface CustomRequest extends Request {
 }
 
 export interface WatchlistItem {
-  assetId: string;
-  assetName: string;
+  coinId: string;
+  coinName: string;
 }
 
 export interface WatchlistDocument extends Document {

@@ -1,24 +1,41 @@
 import create from "zustand";
+import {
+  addUserBalance,
+  fetchUserBalance,
+} from "../services/BalanceAPIService";
+import { BalanceStore } from "../utils/interfaces";
 
-type BalanceStore = {
-  balance: number;
-  addBalance: (amount: number) => void;
-  withdrawBalance: (amount: number) => void;
-  fetchBalance: () => void;
-};
+export const useBalanceStore = create<BalanceStore>((set) => {
+  const store = {
+    balance: 0,
 
-export const useBalanceStore = create<BalanceStore>((set) => ({
-  balance: 0,
+    fetchBalance: async () => {
+      try {
+        const { balance } = await fetchUserBalance();
+        set({ balance });
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+      }
+    },
 
-  fetchBalance: () => {
-    set({ balance: 0 });
-  },
+    addBalance: async (amount: number) => {
+      try {
+        const { balance } = await addUserBalance(amount);
+        set({ balance });
+      } catch (error) {
+        console.error("Error adding balance:", error);
+      }
+    },
 
-  addBalance: (amount) => set((state) => ({ balance: state.balance + amount })),
-
-  withdrawBalance: (amount) =>
-    set((state) => {
-      const newBalance = state.balance - amount;
-      return { balance: newBalance < 0 ? 0 : newBalance }; 
-    }),
-}));
+    withdrawBalance: async (amount: number) => {
+      try {
+        const { balance } = await addUserBalance(-amount);
+        set({ balance });
+      } catch (error) {
+        console.error("Error withdrawing balance:", error);
+      }
+    },
+  };
+  store.fetchBalance();
+  return store;
+});

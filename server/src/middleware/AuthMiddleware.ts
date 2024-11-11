@@ -14,7 +14,6 @@ const Authenticate = (req: CustomRequest, res: Response, next: NextFunction): vo
     }
 
     req.userid = (decoded as { user_id: string }).user_id;
-    console.log(req.userid)
     next();
   });
 };

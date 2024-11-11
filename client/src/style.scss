@@ -1,3 +1,7 @@
+$primary-color: #228be6;
+$hover-color: #0056b3;
+$active-color: #003d7a;
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -34,6 +38,7 @@
 
       &.active {
         color: #1c7ed6;
+        border-bottom-color: $hover-color;
         font-weight: bold;
       }
 
@@ -71,3 +76,21 @@
   }
 }
 
+a {
+  color: $primary-color;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  position: relative;
+
+  &:hover {
+    color: $hover-color;
+    border-bottom-color: $hover-color;
+  }
+
+  &:active {
+    color: $active-color;
+    border-bottom-color: $hover-color;
+  }
+}

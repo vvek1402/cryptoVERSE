@@ -12,6 +12,7 @@ import { NotFound } from "./components/Layout/NotFound";
 import WatchList from "./components/WatchList/WatchList";
 import Balance from "./components/Balance/Balance";
 import Holdings from "./components/Holdings/Holdings";
+import OrdersTable from "./components/Orders/Orders";
 
 export const routes = [
   {
@@ -52,7 +53,7 @@ export const routes = [
           },
           {
             path: "orders",
-            element: <WatchList />,
+            element: <OrdersTable />,
           },
         ],
       },

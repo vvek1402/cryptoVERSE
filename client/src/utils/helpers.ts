@@ -57,18 +57,15 @@ export const calculateDateRange = (range: string) => {
   return { now, start };
 };
 
-export function useCryptoPrices(assets: string[]) {
+export function useCryptoPrices(assets: string) {
   const [prices, setPrices] = useState<{ [key: string]: string }>({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const assetsParam = assets.join(',');
-    const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${assetsParam}`);
+    const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${assets}`);
 
     pricesWs.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       setPrices((prevPrices) => ({ ...prevPrices, ...data }));
-      setLoading(false); 
     };
 
     return () => {
@@ -76,7 +73,7 @@ export function useCryptoPrices(assets: string[]) {
     };
   }, [assets]);
 
-  return { prices, loading };
+  return prices[assets];
 }
 
 export function serverError(form: any, error: any) {

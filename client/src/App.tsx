@@ -4,6 +4,7 @@ import '@mantine/charts/styles.css';
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
+import theme from './theme';
 
 export default function App() {
 	const { pathname } = useLocation();
@@ -13,7 +14,7 @@ export default function App() {
 	}, [pathname]);
 
 	return (
-		<MantineProvider>
+		<MantineProvider theme={theme}>
 			<Outlet />
 		</MantineProvider>
 	);

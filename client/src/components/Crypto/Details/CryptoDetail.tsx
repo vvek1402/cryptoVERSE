@@ -18,6 +18,14 @@ import CoinIcon from "../../Common/CoinIcon";
 import { useState } from "react";
 import AddModal from "../../Holdings/AddModal";
 import { CryptoSelected } from "../../../utils/interfaces";
+import {
+  IconBasketPlus,
+  IconBookmark,
+  IconExternalLink,
+  IconLink,
+} from "@tabler/icons-react";
+import useWatchlistStore from "../../../store/watchlist.store";
+import { notifications } from "@mantine/notifications";
 
 const CryptoDetail = () => {
   const { id } = useParams() as { id: string };
@@ -28,6 +36,9 @@ const CryptoDetail = () => {
     priceUsd: "",
     id: "",
   });
+  const { addCoin, removeCoin, isInWatchlist } = useWatchlistStore(
+    (state) => state
+  );
 
   const { data: details, isLoading: loadingDetails } = useQuery(
     ["cryptoDetails", { id }],
@@ -50,6 +61,23 @@ const CryptoDetail = () => {
     setOpened(true);
   };
 
+  const handleWatchlistClick = (crypto: CryptoSelected) => {
+    if (isInWatchlist(crypto.id)) {
+      removeCoin(crypto.id);
+      notifications.show({
+        title: "Success !!",
+        message: "Coin Removed From Watchlist Successfully",
+      });
+    } else {
+      addCoin(crypto.id, crypto.name);
+
+      notifications.show({
+        title: "Success !!",
+        message: "Coin Added to Watchlist Successfully",
+      });
+    }
+  };
+
   return (
     <>
       <Layout>
@@ -63,11 +91,17 @@ const CryptoDetail = () => {
         </Center>
         <Flex justify="flex-end">
           <Group mb="20px">
+            <Button
+              onClick={() => handleWatchlistClick(details)}
+              color={isInWatchlist(details.id) ? "teal" : ""}
+            >
+              <IconBookmark />
+            </Button>
             <Button onClick={() => handlePurchaseClick(details)}>
-              Purchase
+              <IconBasketPlus />
             </Button>
             <Button component={Link} to={details.explorer} target="_blank">
-              Explore
+              <IconExternalLink />
             </Button>
           </Group>
         </Flex>

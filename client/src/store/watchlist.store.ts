@@ -3,15 +3,8 @@ import {
   getUserWatchlist,
   addCoinToWatchlist,
   removeCoinFromWatchlist,
-} from "../services/WatchlistService";
-
-interface WatchlistStore {
-  watchlist: { assetId: string; assetName: string }[];
-  fetchWatchlist: () => Promise<void>;
-  addCoin: (assetId: string, assetName: string) => Promise<void>;
-  removeCoin: (coinId: string) => Promise<void>;
-  isInWatchlist: (cryptoId: string) => boolean;
-}
+} from "../services/WatchlistAPIService";
+import { WatchlistStore } from "../utils/interfaces";
 
 const useWatchlistStore = create<WatchlistStore>((set, get) => {
   const store = {
@@ -24,9 +17,9 @@ const useWatchlistStore = create<WatchlistStore>((set, get) => {
         console.error("Error fetching watchlist:", error);
       }
     },
-    addCoin: async (assetId: string, assetName: string) => {
+    addCoin: async (coinId: string, coinName: string) => {
       try {
-        const newCoin = await addCoinToWatchlist(assetId, assetName);
+        const newCoin = await addCoinToWatchlist(coinId, coinName);
         set({ watchlist: newCoin.items });
       } catch (error) {
         console.error("Error adding coin to watchlist:", error);
@@ -36,15 +29,15 @@ const useWatchlistStore = create<WatchlistStore>((set, get) => {
       try {
         await removeCoinFromWatchlist(coinId);
         set((state) => ({
-          watchlist: state.watchlist.filter((coin) => coin.assetId !== coinId),
+          watchlist: state.watchlist.filter((coin) => coin.coinId !== coinId),
         }));
       } catch (error) {
         console.error("Error removing coin from watchlist:", error);
       }
     },
-    isInWatchlist: (assetId: string): any => {
+    isInWatchlist: (coinId: string): any => {
       const state = get();
-      return state.watchlist.some((coin) => coin.assetId === assetId);
+      return state.watchlist.some((coin) => coin.coinId === coinId);
     },
   };
   store.fetchWatchlist();

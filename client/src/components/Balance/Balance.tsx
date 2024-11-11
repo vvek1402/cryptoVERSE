@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, Paper, Text, Center } from "@mantine/core";
+import {
+  Modal,
+  Button,
+  Paper,
+  Text,
+  Center,
+  NumberInput,
+  Group,
+  Title,
+  Stack,
+  Divider,
+} from "@mantine/core";
 import { useBalanceStore } from "../../store/balance.store";
 import Layout from "../Layout/Layout";
+import PaymentLogsTable from "./PaymentLogs";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 
 const Balance = () => {
   const { balance, addBalance, withdrawBalance, fetchBalance } =
     useBalanceStore();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<any>(1);
   const [actionType, setActionType] = useState<"add" | "withdraw">("add");
 
   useEffect(() => {
     fetchBalance();
-  }, [fetchBalance]);
+  }, []);
 
   const handleOpenModal = (type: "add" | "withdraw") => {
     setActionType(type);
     setModalOpen(true);
-    setAmount(0);
+    setAmount(1);
   };
 
   const handleConfirm = () => {
@@ -28,7 +41,7 @@ const Balance = () => {
       withdrawBalance(amount);
     }
     setModalOpen(false);
-    setAmount(0);
+    setAmount(1);
   };
 
   const isWithdrawExceedingBalance =
@@ -36,55 +49,93 @@ const Balance = () => {
 
   return (
     <Layout>
-      <Center mt="md">
-        <Button onClick={() => handleOpenModal("add")} color="green" mr="sm">
-          Add Balance
-        </Button>
-        <Button onClick={() => handleOpenModal("withdraw")} color="red">
-          Withdraw Balance
-        </Button>
-      </Center>
       <Paper
         withBorder
-        style={{ padding: "20px" }}
-        shadow="lg"
-        radius="md"
+        style={{
+          padding: "30px",
+          borderRadius: "16px",
+        }}
         mt="xl"
       >
-        <Text ta="center" fw={700} size="lg">
-          Total Balance:
-        </Text>
-        <Text ta="center" size="xl" color="blue" mt="sm">
-          ${balance.toFixed(2)}
-        </Text>
+        <Stack align="center">
+          <Title order={2} ta="center">
+            Total Balance
+          </Title>
+          <Text size="xl" w={700} ta="center">
+            ${balance.toFixed(2)}
+          </Text>
+        </Stack>
+        <Divider my="lg" />
+        <Center mt="lg">
+          <Group>
+            <Button
+              onClick={() => handleOpenModal("add")}
+              color="teal"
+              leftSection={<IconPlus />}
+              radius="md"
+              size="md"
+            >
+              Add Balance
+            </Button>
+            <Button
+              onClick={() => handleOpenModal("withdraw")}
+              color="red"
+              leftSection={<IconMinus />}
+              radius="md"
+              size="md"
+            >
+              Withdraw Balance
+            </Button>
+          </Group>
+        </Center>
       </Paper>
+
+
+      <PaymentLogsTable />
 
       <Modal
         opened={modalOpen}
         onClose={() => setModalOpen(false)}
         title={`${actionType === "add" ? "Add" : "Withdraw"} Balance`}
+        centered
+        radius="lg"
+        styles={{
+          title: { fontWeight: 600, fontSize: "20px" },
+          body: { padding: "24px" },
+        }}
       >
-        <Text mb="xs">
-          {actionType === "withdraw" &&
-            `Available Balance: $${balance.toFixed(2)}`}
-        </Text>
+        <Stack>
+          {actionType === "withdraw" && (
+            <Text color="dimmed" size="sm">
+              Available Balance: <strong>${balance.toFixed(2)}</strong>
+            </Text>
+          )}
 
-        <Input
-          placeholder="Enter amount"
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(parseFloat(e.currentTarget.value))}
-          mb="md"
-        />
+          <NumberInput
+            placeholder="Enter amount"
+            min={1}
+            value={amount}
+            onChange={setAmount}
+            styles={{
+              input: {
+                height: "48px",
+                fontSize: "16px",
+                padding: "12px",
+              },
+            }}
+          />
 
-        <Button
-          fullWidth
-          onClick={handleConfirm}
-          color={actionType === "add" ? "green" : "red"}
-          disabled={actionType === "withdraw" && isWithdrawExceedingBalance}
-        >
-          Confirm
-        </Button>
+          <Button
+            fullWidth
+            onClick={handleConfirm}
+            color={actionType === "add" ? "teal" : "red"}
+            disabled={isWithdrawExceedingBalance || amount <= 0}
+            size="md"
+            radius="md"
+          >
+            {actionType === "add" ? "Confirm Add" : "Confirm Withdraw"}
+          </Button>
+        </Stack>
       </Modal>
     </Layout>
   );

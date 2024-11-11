@@ -2,21 +2,19 @@ import React, { useState, useMemo } from "react";
 import {
   Button,
   Modal,
-  Input,
   Text,
-  Badge,
   Group,
   Paper,
   SimpleGrid,
   NumberInput,
-  Center,
+  Stack,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useHoldingsStore } from "../../store/holdings.store";
 import Layout from "../Layout/Layout";
 import CoinIcon from "../Common/CoinIcon";
 import { CryptoSelected } from "../../utils/interfaces";
-import { formatValueToUsd } from "../../utils/helpers";
+import { useCryptoPrices } from "../../utils/helpers";
 
 const Holdings = () => {
   const { coins, removeCoin } = useHoldingsStore();
@@ -28,7 +26,9 @@ const Holdings = () => {
     id: "",
     amount: 0,
   });
-  const [sellQuantity, setSellQuantity] = useState<number>(1);
+  const [sellQuantity, setSellQuantity] = useState<any>(1);
+  let cyptoLivePrice: any =
+    useCryptoPrices(selectedCrypto.name.toLowerCase()) ?? 0;
 
   const totalValue = useMemo(() => {
     return coins.reduce(
@@ -39,7 +39,11 @@ const Holdings = () => {
 
   const handleSell = () => {
     if (selectedCrypto && sellQuantity > 0) {
-      removeCoin(selectedCrypto.id, sellQuantity);
+      removeCoin(
+        selectedCrypto.id,
+        sellQuantity,
+        sellQuantity * cyptoLivePrice
+      );
       setOpened(false);
       setSellQuantity(0);
       notifications.show({
@@ -65,53 +69,42 @@ const Holdings = () => {
           const totalCoinValue = (coin.amount * coin.priceUsd).toFixed(2);
           return (
             <Paper withBorder p="md" radius="md" key={coin.name}>
-              <CoinIcon src={coin?.symbol} alt={coin?.name} />
+              <Stack m="sm">
+                <Stack align="center">
+                  <CoinIcon src={coin?.symbol} alt={coin?.name} />
+                  <Text>{coin.name}</Text>
+                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+                    Quantity: {coin.amount}
+                  </Text>
+                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+                    Current Price (USD): ${coin.priceUsd}{" "}
+                  </Text>
+                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+                    Total Value: ${totalCoinValue}
+                  </Text>
+                </Stack>
 
-              <Group style={{ marginBottom: 5 }}>
-                <Text>{coin.name}</Text>
-              </Group>
-              <Text>
-                Quantity:{" "}
-                <Badge color="blue" size="xl">
-                  {coin.amount}
-                </Badge>
-              </Text>
-              <Text>
-                Price (USD):{" "}
-                <Badge color="green" size="xl">
-                  ${formatValueToUsd(coin.priceUsd)}
-                </Badge>
-              </Text>
-              <Text>
-                Total Value:{" "}
-                <Badge color="violet" size="xl">
-                  ${formatValueToUsd(totalCoinValue)}
-                </Badge>
-              </Text>
-              <Button
-                color="red"
-                fullWidth
-                mt="md"
-                onClick={() => handleSellClick(coin)}
-              >
-                Sell
-              </Button>
+                <Button
+                  color="red"
+                  fullWidth
+                  mt="md"
+                  onClick={() => handleSellClick(coin)}
+                >
+                  Sell
+                </Button>
+              </Stack>
             </Paper>
           );
         })}
       </SimpleGrid>
 
-      <Paper
-        withBorder
-        style={{ padding: "20px" }}
-        shadow="lg"
-        radius="md"
-        mt="xl"
-      >
-          <Text ta="center" fw={700} size="lg">Overall Total</Text>
-          <Text ta="center" size="xl" color="blue" mt="sm">
-            ${formatValueToUsd(totalValue.toFixed(2))}
-          </Text>
+      <Paper withBorder style={{ padding: "20px" }} radius="md" mt="xl">
+        <Text ta="center" fw={700} size="lg">
+          Overall Total
+        </Text>
+        <Text ta="center" size="xl" color="blue" mt="sm">
+          ${totalValue.toFixed(2)}
+        </Text>
       </Paper>
 
       <Modal
@@ -119,19 +112,28 @@ const Holdings = () => {
         onClose={() => setOpened(false)}
         title={`Sell : ${selectedCrypto?.name}`}
       >
-        <CoinIcon src={selectedCrypto?.symbol} alt={selectedCrypto?.name} />
+        <Stack m="sm">
+          <Stack align="center">
+            <CoinIcon src={selectedCrypto?.symbol} alt={selectedCrypto?.name} />
+            <Text style={{ fontSize: "18px", fontWeight: 500 }}>
+              Price: ${cyptoLivePrice}
+            </Text>
+          </Stack>
+          <NumberInput
+            defaultValue={sellQuantity}
+            onChange={setSellQuantity}
+            placeholder="Enter quantity to sell"
+            max={selectedCrypto?.amount}
+            min={0}
+          />
+          <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+            Quantity Available: {selectedCrypto?.amount}
+          </Text>
 
-        <Text>Quantity Available: {selectedCrypto?.amount}</Text>
-        <NumberInput
-          defaultValue={sellQuantity}
-          onChange={(val: number) => setSellQuantity(val)}
-          placeholder="Enter quantity to sell"
-          max={selectedCrypto?.amount}
-          min={0}
-        />
-        <Button fullWidth mt="md" onClick={handleSell}>
-          Sell
-        </Button>
+          <Button fullWidth mt="md" onClick={handleSell}>
+            Sell
+          </Button>
+        </Stack>
       </Modal>
     </Layout>
   );

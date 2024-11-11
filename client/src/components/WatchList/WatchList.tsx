@@ -10,7 +10,7 @@ const Watchlist = () => {
     })
   );
 
-  const ids = watchlist.map((coin) => coin.assetId).join(",");
+  const ids = watchlist.map((coin) => coin.coinId).join(",");
 
   return (
     <Layout>
