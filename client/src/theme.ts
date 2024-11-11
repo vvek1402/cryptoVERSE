@@ -1,3 +1,4 @@
+import { ThemeProviderProps } from "@emotion/react";
 import { MantineThemeOverride } from "@mantine/core";
 
 const theme: MantineThemeOverride = {
@@ -5,9 +6,6 @@ const theme: MantineThemeOverride = {
     Modal: {
       defaultProps: {
         centered: true,
-        overlayBlur: 3,
-        transition: "fade",
-        transitionDuration: 300,
         radius: "lg",
       },
       styles: {
@@ -21,7 +19,7 @@ const theme: MantineThemeOverride = {
           size: "md",
           border : "none"
         },
-        styles: (theme : any) => ({
+        styles: () => ({
           root: {
             fontWeight: 500,
             padding: "12px",

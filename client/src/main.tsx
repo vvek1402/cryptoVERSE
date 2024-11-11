@@ -9,10 +9,10 @@ import Login from "./pages/Login";
 import ExchangeLanding from "./pages/ExchangeLanding";
 import CryptoDetailsLanding from "./pages/CryptoDetailsLanding";
 import { NotFound } from "./components/Layout/NotFound";
-import WatchList from "./components/WatchList/WatchList";
-import Balance from "./components/Balance/Balance";
-import Holdings from "./components/Holdings/Holdings";
-import OrdersTable from "./components/Orders/Orders";
+import WatchlistLanding from "./pages/WatchlistLanding";
+import BalanceLanding from "./pages/BalanceLanding";
+import HoldingsLanding from "./pages/HoldingsLanding";
+import OrdersLanding from "./pages/OrdersLanding";
 
 export const routes = [
   {
@@ -41,19 +41,19 @@ export const routes = [
           },
           {
             path: "balance",
-            element: <Balance />,
+            element: <BalanceLanding />,
           },
           {
             path: "watchlist",
-            element: <WatchList />,
+            element: <WatchlistLanding />,
           },
           {
             path: "holdings",
-            element: <Holdings />,
+            element: <HoldingsLanding />,
           },
           {
             path: "orders",
-            element: <OrdersTable />,
+            element: <OrdersLanding />,
           },
         ],
       },

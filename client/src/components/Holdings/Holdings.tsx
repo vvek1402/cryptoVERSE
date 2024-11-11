@@ -1,20 +1,19 @@
+// Holdings.js
 import React, { useState, useMemo } from "react";
 import {
-  Button,
   Modal,
   Text,
-  Group,
-  Paper,
   SimpleGrid,
   NumberInput,
   Stack,
+  Button,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useHoldingsStore } from "../../store/holdings.store";
-import Layout from "../Layout/Layout";
-import CoinIcon from "../Common/CoinIcon";
+import HoldingCard from "./HoldingCard";
 import { CryptoSelected } from "../../utils/interfaces";
 import { useCryptoPrices } from "../../utils/helpers";
+import CoinIcon from "../Common/CoinIcon";
 
 const Holdings = () => {
   const { coins, removeCoin } = useHoldingsStore();
@@ -27,16 +26,9 @@ const Holdings = () => {
     amount: 0,
   });
   const [sellQuantity, setSellQuantity] = useState<any>(1);
+
   let cyptoLivePrice: any =
     useCryptoPrices(selectedCrypto.name.toLowerCase()) ?? 0;
-
-  const totalValue = useMemo(() => {
-    return coins.reduce(
-      (acc, coin: any) => acc + coin.amount * coin.priceUsd,
-      0
-    );
-  }, [coins]);
-
   const handleSell = () => {
     if (selectedCrypto && sellQuantity > 0) {
       removeCoin(
@@ -59,53 +51,16 @@ const Holdings = () => {
   };
 
   return (
-    <Layout>
-      <Text ta="center" size="xl" mb="20px" fw="700">
-        My Holdings
-      </Text>
-
+    <>
       <SimpleGrid cols={{ sm: 1, md: 2, lg: 4 }}>
-        {coins.map((coin: any) => {
-          const totalCoinValue = (coin.amount * coin.priceUsd).toFixed(2);
-          return (
-            <Paper withBorder p="md" radius="md" key={coin.name}>
-              <Stack m="sm">
-                <Stack align="center">
-                  <CoinIcon src={coin?.symbol} alt={coin?.name} />
-                  <Text>{coin.name}</Text>
-                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-                    Quantity: {coin.amount}
-                  </Text>
-                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-                    Current Price (USD): ${coin.priceUsd}{" "}
-                  </Text>
-                  <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-                    Total Value: ${totalCoinValue}
-                  </Text>
-                </Stack>
-
-                <Button
-                  color="red"
-                  fullWidth
-                  mt="md"
-                  onClick={() => handleSellClick(coin)}
-                >
-                  Sell
-                </Button>
-              </Stack>
-            </Paper>
-          );
-        })}
+        {coins.map((coin) => (
+          <HoldingCard
+            key={coin.name}
+            coin={coin}
+            handleSellClick={handleSellClick}
+          />
+        ))}
       </SimpleGrid>
-
-      <Paper withBorder style={{ padding: "20px" }} radius="md" mt="xl">
-        <Text ta="center" fw={700} size="lg">
-          Overall Total
-        </Text>
-        <Text ta="center" size="xl" color="blue" mt="sm">
-          ${totalValue.toFixed(2)}
-        </Text>
-      </Paper>
 
       <Modal
         opened={opened}
@@ -118,7 +73,7 @@ const Holdings = () => {
             <Text style={{ fontSize: "18px", fontWeight: 500 }}>
               Price: ${cyptoLivePrice}
             </Text>
-          </Stack>
+          </Stack>{" "}
           <NumberInput
             defaultValue={sellQuantity}
             onChange={setSellQuantity}
@@ -129,13 +84,12 @@ const Holdings = () => {
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
             Quantity Available: {selectedCrypto?.amount}
           </Text>
-
-          <Button fullWidth mt="md" onClick={handleSell}>
+          <Button fullWidth mt="md" color="red" onClick={handleSell}>
             Sell
           </Button>
         </Stack>
       </Modal>
-    </Layout>
+    </>
   );
 };
 

@@ -80,46 +80,44 @@ const CryptoDetail = () => {
 
   return (
     <>
-      <Layout>
-        <Center>
-          <Group mb="30px" ta="center" mx="auto">
-            <CoinIcon src={details.symbol} alt={details.name} />
-            <Title>
-              {details.name} ({details.symbol})
-            </Title>
-          </Group>
-        </Center>
-        <Flex justify="flex-end">
-          <Group mb="20px">
-            <Button
-              onClick={() => handleWatchlistClick(details)}
-              color={isInWatchlist(details.id) ? "teal" : ""}
-            >
-              <IconBookmark />
-            </Button>
-            <Button onClick={() => handlePurchaseClick(details)}>
-              <IconBasketPlus />
-            </Button>
-            <Button component={Link} to={details.explorer} target="_blank">
-              <IconExternalLink />
-            </Button>
-          </Group>
-        </Flex>
-        <Stats details={details} />
-        <Grid gutter="xl">
-          <Grid.Col span={12}>
-            <Chart />
-          </Grid.Col>
-          <Grid.Col span={12}>
-            <MarketTable />
-          </Grid.Col>
-        </Grid>
-        <AddModal
-          opened={opened}
-          selectedCrypto={selectedCrypto}
-          setOpened={setOpened}
-        />
-      </Layout>
+      <Center>
+        <Group mb="30px" ta="center" mx="auto">
+          <CoinIcon src={details.symbol} alt={details.name} />
+          <Title>
+            {details.name} ({details.symbol})
+          </Title>
+        </Group>
+      </Center>
+      <Flex justify="flex-end">
+        <Group mb="20px">
+          <Button
+            onClick={() => handleWatchlistClick(details)}
+            color={isInWatchlist(details.id) ? "teal" : ""}
+          >
+            <IconBookmark />
+          </Button>
+          <Button onClick={() => handlePurchaseClick(details)}>
+            <IconBasketPlus />
+          </Button>
+          <Button component={Link} to={details.explorer} target="_blank">
+            <IconExternalLink />
+          </Button>
+        </Group>
+      </Flex>
+      <Stats details={details} />
+      <Grid gutter="xl">
+        <Grid.Col span={12}>
+          <Chart />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <MarketTable />
+        </Grid.Col>
+      </Grid>
+      <AddModal
+        opened={opened}
+        selectedCrypto={selectedCrypto}
+        setOpened={setOpened}
+      />
     </>
   );
 };

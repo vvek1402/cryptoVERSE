@@ -73,17 +73,14 @@ const OrdersTable = () => {
   };
 
   return (
-    <Layout>
-      <Text ta="center" size="xl" fw="700">
-        Orders Logs
-      </Text>
+    <>
       {ordersLogs.length > 0 ? <CommonTable data={ordersTableData} /> : <></>}
       <Center style={{ marginTop: "20px", display: moreData ? "" : "none" }}>
         <Button onClick={loadMore} loading={isFetching}>
           View More
         </Button>
       </Center>
-    </Layout>
+    </>
   );
 };
 

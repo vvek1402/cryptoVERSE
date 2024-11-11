@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Divider, Title } from "@mantine/core";
 import CryptoTable from "../components/Crypto/CryptoTable";
 import Layout from "../components/Layout/Layout";
 
@@ -6,9 +6,10 @@ const CryptoLanding = () => {
   return (
     <>
       <Layout>
-        <Text ta="center" size="xl" mb="20px" fw="700">
+        <Title ta="center" order={2}>
           Cryptocurrency Prices
-        </Text>
+        </Title>
+        <Divider my="lg" />
         <CryptoTable />
       </Layout>
     </>

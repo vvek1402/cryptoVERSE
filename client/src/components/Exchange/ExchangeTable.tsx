@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { ExchangeData } from "../../utils/interfaces";
 import { fetchExchangeData } from "../../services/CryptoAPIService";
-import Layout from "../Layout/Layout";
 import CommonTable from "../Common/CommonTable";
 import { queryLimit } from "../../utils/constants";
 
@@ -67,19 +66,12 @@ const ExchangeTable = () => {
 
   return (
     <>
-      <Layout>
-        <Text ta="center" size="xl" mb="20px" fw="700">
-          Exchanges
-        </Text>
-
-        <CommonTable data={exchangeTableData} />
-
-        <Center style={{ marginTop: "20px", display: moreData ? "" : "none" }}>
-          <Button onClick={loadMore} loading={isFetching}>
-            View More
-          </Button>
-        </Center>
-      </Layout>
+      <CommonTable data={exchangeTableData} />
+      <Center style={{ marginTop: "20px", display: moreData ? "" : "none" }}>
+        <Button onClick={loadMore} loading={isFetching}>
+          View More
+        </Button>
+      </Center>
     </>
   );
 };

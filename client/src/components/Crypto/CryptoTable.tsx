@@ -28,8 +28,9 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
   const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
   const [moreData, setMoreData] = useState(true);
   const [opened, setOpened] = useState(false);
-  const { addCoin, removeCoin, isInWatchlist } =
-    useWatchlistStore((state) => state);
+  const { addCoin, removeCoin, isInWatchlist } = useWatchlistStore(
+    (state) => state
+  );
 
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoSelected>({
     name: "",

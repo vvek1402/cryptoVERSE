@@ -12,7 +12,6 @@ import {
   Divider,
 } from "@mantine/core";
 import { useBalanceStore } from "../../store/balance.store";
-import Layout from "../Layout/Layout";
 import PaymentLogsTable from "./PaymentLogs";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 
@@ -48,7 +47,7 @@ const Balance = () => {
     actionType === "withdraw" && amount > balance;
 
   return (
-    <Layout>
+    <>
       <Paper
         withBorder
         style={{
@@ -137,7 +136,7 @@ const Balance = () => {
           </Button>
         </Stack>
       </Modal>
-    </Layout>
+    </>
   );
 };
 
