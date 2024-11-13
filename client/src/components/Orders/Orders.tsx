@@ -5,7 +5,6 @@ import CommonTable from "../Common/CommonTable";
 import { queryLimit } from "../../utils/constants";
 import { OrdersLog } from "../../utils/interfaces";
 import { fetchOrdersLogs } from "../../services/HoldingsAPIService";
-import Layout from "../Layout/Layout";
 
 const OrdersTable = () => {
   const limit = queryLimit;
@@ -53,7 +52,7 @@ const OrdersTable = () => {
   }
 
   const ordersTableData = {
-    head: ["Date", "Added Value", "Order Type", "Coin Name", "Amount"],
+    head: ["Date", "Added Value", "Order Type", "Coin Name", "Quantity"],
     body: ordersLogs.map((log) => [
       new Date(log.createdAt).toLocaleDateString(),
       <span
@@ -68,7 +67,7 @@ const OrdersTable = () => {
       </span>,
       log.orderType,
       log.coinName,
-      log.amount,
+      log.quantity,
     ]),
   };
 

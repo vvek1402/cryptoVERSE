@@ -15,7 +15,7 @@ export const useHoldingsStore = create<HoldingsState>((set) => {
       try {
         const holdings = await getUserHoldings();
         const totalQuantity = holdings.coins.reduce(
-          (acc: number, coin: any) => acc + coin.amount,
+          (acc: number, coin: CryptoSelected) => acc + (coin.quantity ?? 0),
           0
         );
 
@@ -34,7 +34,7 @@ export const useHoldingsStore = create<HoldingsState>((set) => {
         const updatedCoins = response.holdings.coins;
 
         const totalQuantity = updatedCoins.reduce(
-          (acc: number, coin: any) => acc + coin.amount,
+          (acc: number, coin: CryptoSelected) => acc + (coin.quantity ?? 0),
           0
         );
 
@@ -47,13 +47,13 @@ export const useHoldingsStore = create<HoldingsState>((set) => {
       }
     },
 
-    removeCoin: async (coinId: string, quantity: number, totalValue: number) => {
+    removeCoin: async (coin: CryptoSelected, quantity: number, totalValue: number) => {
       try {
-        const response = await removeCoinFromHoldings(coinId, quantity, totalValue);
+        const response = await removeCoinFromHoldings(coin, quantity, totalValue);
         const updatedCoins = response.holdings.coins;
 
         const totalQuantity = updatedCoins.reduce(
-          (acc: number, coin: any) => acc + coin.amount,
+          (acc: number, coin: CryptoSelected) => acc + (coin.quantity ?? 0),
           0
         );
 

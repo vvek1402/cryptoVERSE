@@ -3,7 +3,7 @@ import { Orders } from "../models/Orders";
 
 export const addCoinToHoldings = async (
   userId: string | undefined,
-  coin: { id: string; amount: number; priceUsd: number; name: string; symbol: string }
+  coin: { id: string; quantity: number; priceUsd: number; name: string; symbol: string }
 ) => {
   const holdings = await Holdings.findOne({ userId });
 
@@ -19,7 +19,7 @@ export const addCoinToHoldings = async (
   const existingCoin = holdings.coins.find((c) => c.id === coin.id);
 
   if (existingCoin) {
-    existingCoin.amount += coin.amount;
+    existingCoin.quantity += coin.quantity;
   } else {
     holdings.coins.push(coin);
   }
@@ -31,7 +31,7 @@ export const addCoinToHoldings = async (
 export const removeCoinFromHoldings = async (
   userId: string | undefined,
   coinId: string,
-  amount: number
+  quantity: number
 ) => {
   const holdings = await Holdings.findOne({ userId });
 
@@ -40,13 +40,13 @@ export const removeCoinFromHoldings = async (
   }
 
   const coin = holdings.coins.find((c) => c.id === coinId);
-  if (!coin || coin.amount < amount) {
+  if (!coin || coin.quantity < quantity) {
     throw new Error("Not enough coins to remove");
   }
 
-  coin.amount -= amount;
+  coin.quantity -= quantity;
 
-  if (coin.amount === 0) {
+  if (coin.quantity === 0) {
     holdings.coins = holdings.coins.filter((c) => c.id !== coinId);
   }
 
@@ -63,13 +63,14 @@ export const createOrder = async (
   userId: string | undefined, 
   orderType: string, 
   totalPrice: number, 
-  coin: { id: string; amount: number; priceUsd: number; name: string; symbol: string }
+  coin: { id: string; quantity: number; priceUsd: number; name: string; symbol: string },
+  quantity : number
 ) => {
   const newOrder = new Orders({
     userId,
     coinId: coin.id,
     coinName: coin.name,
-    amount: coin.amount,
+    quantity: quantity,
     price: coin.priceUsd,
     orderType,
     totalPrice,

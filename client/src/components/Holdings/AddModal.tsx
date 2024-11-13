@@ -6,7 +6,6 @@ import { CryptoSelected } from "../../utils/interfaces";
 import { useHoldingsStore } from "../../store/holdings.store";
 import { useCryptoPrices } from "../../utils/helpers";
 import { useBalanceStore } from "../../store/balance.store";
-import { IconCoin } from "@tabler/icons-react";
 
 export default function AddModal({
   opened,
@@ -17,23 +16,23 @@ export default function AddModal({
   selectedCrypto: CryptoSelected;
   setOpened: (bool: boolean) => void;
 }) {
-  const [quantity, setQuantity] = useState<any>(0);
+  const [quantity, setQuantity] = useState<number | string>(0);
   const addCoin = useHoldingsStore((state) => state.addCoin);
   const { balance } = useBalanceStore((state) => state);
 
-  let cyptoLivePrice: any =
+  let cyptoLivePrice: number =
     useCryptoPrices(selectedCrypto.name.toLowerCase()) ?? 0;
-  let totalCost = quantity * cyptoLivePrice;
-  let isButtonDisabled = balance < totalCost || quantity <= 0;
+  let totalCost = Number(quantity) * cyptoLivePrice;
+  let isButtonDisabled = balance < totalCost || Number(quantity) <= 0;
 
   const handlePurchase = () => {
-    if (selectedCrypto && quantity > 0) {
+    if (selectedCrypto && Number(quantity) > 0) {
       addCoin(
         {
           id: selectedCrypto.id,
           name: selectedCrypto.name,
-          amount: quantity,
-          priceUsd: cyptoLivePrice,
+          quantity:  Number(quantity),
+          priceUsd: Number(cyptoLivePrice).toFixed(2),
           symbol: selectedCrypto.symbol,
         },
         totalCost

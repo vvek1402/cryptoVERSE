@@ -163,7 +163,6 @@ export function AuthenticationForm(props: PaperProps) {
               </Anchor>
               <Button
                 type="submit"
-                radius="xl"
                 loading={
                   type === "login"
                     ? loginMutation.isLoading

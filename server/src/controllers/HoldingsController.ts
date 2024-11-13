@@ -18,7 +18,7 @@ export const addCoin = async (req: CustomRequest, res: Response) => {
 
     const holdings = await addCoinToHoldings(userId, coin);
 
-    await createOrder(userId, "buy", -Math.abs(totalValue), coin);
+    await createOrder(userId, "buy", -Math.abs(totalValue), coin, coin.quantity);
     res.json({ balance, holdings });
   } catch (err: unknown) {
     console.error("Server error:", err);
@@ -26,17 +26,14 @@ export const addCoin = async (req: CustomRequest, res: Response) => {
 };
 
 export const removeCoin = async (req: CustomRequest, res: Response) => {
-  const { coinId, quantity, totalValue } = req.body;
-  console.log(req.body)
+  const { coin, quantity, totalValue } = req.body;
   const userId = req.userid; 
-
+  const coinId = coin.id;
   try {
     const holdings = await removeCoinFromHoldings(userId, coinId, quantity);
 
-    const coin : any = holdings.coins.find((c) => c.id === coinId);
-
     await updateBalanceQuery(userId, totalValue, true);
-    await createOrder(userId, "sell", Math.abs(totalValue), coin);
+    await createOrder(userId, "sell", Math.abs(totalValue), coin, quantity);
 
     res.json({ holdings });
   } catch (err: unknown) {

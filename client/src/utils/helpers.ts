@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { ErrorResponse, Form } from "./interfaces";
 
 export const formatValueToUsd = (value: string) => {
   const numValue = parseFloat(value);
@@ -58,7 +59,7 @@ export const calculateDateRange = (range: string) => {
 };
 
 export function useCryptoPrices(assets: string) {
-  const [prices, setPrices] = useState<{ [key: string]: string }>({});
+  const [prices, setPrices] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${assets}`);
@@ -76,10 +77,10 @@ export function useCryptoPrices(assets: string) {
   return prices[assets];
 }
 
-export function serverError(form: any, error: any) {
+export function serverError(form: Form, error: ErrorResponse) {
   if (error.response?.status === 400) {
     const errors = error.response.data.errors;
-    errors.forEach((err: { path: string; msg: string }) => {
+    errors?.forEach((err: { path: string; msg: string }) => {
       form.setFieldError(err.path, err.msg);
     });
   } else if (error.response?.status === 403) {

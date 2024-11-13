@@ -1,6 +1,7 @@
 import axiosInstance from "../utils/axiosInstance";
+import { CryptoSelected } from "../utils/interfaces";
 
-export const addCoinToHoldings = async (coin: any, totalValue : number) => {
+export const addCoinToHoldings = async (coin: CryptoSelected, totalValue : number) => {
   const response = await axiosInstance.post(`/holdings/add-coin`, {
     coin,
     totalValue
@@ -9,12 +10,12 @@ export const addCoinToHoldings = async (coin: any, totalValue : number) => {
 };
 
 export const removeCoinFromHoldings = async (
-  coinId: string,
+  coin: CryptoSelected,
   quantity: number,
   totalValue : number,
 ) => {
   const response = await axiosInstance.post(`/holdings/remove-coin`, {
-    coinId,
+    coin,
     quantity,
     totalValue
   });

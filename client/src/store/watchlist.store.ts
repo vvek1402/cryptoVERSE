@@ -35,7 +35,7 @@ const useWatchlistStore = create<WatchlistStore>((set, get) => {
         console.error("Error removing coin from watchlist:", error);
       }
     },
-    isInWatchlist: (coinId: string): any => {
+    isInWatchlist: (coinId: string): boolean => {
       const state = get();
       return state.watchlist.some((coin) => coin.coinId === coinId);
     },

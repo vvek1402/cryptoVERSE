@@ -23,18 +23,24 @@ const Holdings = () => {
     symbol: "",
     priceUsd: "",
     id: "",
-    amount: 0,
+    quantity: 0,
   });
-  const [sellQuantity, setSellQuantity] = useState<any>(1);
+  const [sellQuantity, setSellQuantity] = useState<number | string>(1);
 
-  let cyptoLivePrice: any =
+  let cyptoLivePrice: number =
     useCryptoPrices(selectedCrypto.name.toLowerCase()) ?? 0;
   const handleSell = () => {
-    if (selectedCrypto && sellQuantity > 0) {
+    if (selectedCrypto && Number(sellQuantity) > 0) {
       removeCoin(
-        selectedCrypto.id,
-        sellQuantity,
-        sellQuantity * cyptoLivePrice
+        {
+          id: selectedCrypto.id,
+          name: selectedCrypto.name,
+          quantity: selectedCrypto.quantity,
+          priceUsd: Number(cyptoLivePrice).toFixed(2),
+          symbol: selectedCrypto.symbol,
+        },
+        Number(sellQuantity),
+        Number(sellQuantity) * cyptoLivePrice
       );
       setOpened(false);
       setSellQuantity(0);
@@ -78,11 +84,11 @@ const Holdings = () => {
             defaultValue={sellQuantity}
             onChange={setSellQuantity}
             placeholder="Enter quantity to sell"
-            max={selectedCrypto?.amount}
+            max={selectedCrypto?.quantity}
             min={0}
           />
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-            Quantity Available: {selectedCrypto?.amount}
+            Quantity Available: {selectedCrypto?.quantity}
           </Text>
           <Button fullWidth mt="md" color="red" onClick={handleSell}>
             Sell

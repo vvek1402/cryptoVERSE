@@ -53,14 +53,14 @@ export interface CryptoSelected {
   symbol: string;
   priceUsd: string;
   id: string;
-  amount?: number;
+  quantity?: number;
 }
 
 export interface HoldingsState {
   coins: CryptoSelected[];
   totalQuantity: number;
   addCoin: (coin: CryptoSelected, totalValue : number) => void;
-  removeCoin: (id: string, quantity: number, totalValue : number) => void;
+  removeCoin: (coin: CryptoSelected, quantity: number, totalValue : number) => void;
 }
 
 export interface TableData {
@@ -122,5 +122,19 @@ export interface OrdersLog {
   createdAt: string;
   orderType: string;
   coinName : string;
-  amount : number
+  quantity : number
+}
+
+export interface Form {
+  setFieldError: (field: string, message: string) => void;
+}
+
+export interface ErrorResponse {
+  response?: {
+    status: number;
+    data: {
+      errors?: { path: string; msg: string }[];
+      error?: string;
+    };
+  };
 }

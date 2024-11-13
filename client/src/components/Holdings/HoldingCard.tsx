@@ -1,18 +1,28 @@
-// HoldingCard.js
 import React, { useMemo } from "react";
 import { Paper, Text, Stack, Button } from "@mantine/core";
 import CoinIcon from "../Common/CoinIcon";
 import { useCryptoPrices } from "../../utils/helpers";
 import { Link } from "react-router-dom";
+import { CryptoSelected } from "../../utils/interfaces";
 
-const HoldingCard = ({ coin, handleSellClick }: any) => {
-  const livePrice: any = useCryptoPrices(coin.name.toLowerCase()) ?? 0;
+const HoldingCard = ({
+  coin,
+  handleSellClick,
+}: {
+  coin: CryptoSelected;
+  handleSellClick: (coin: CryptoSelected) => void;
+}) => {
+  const livePrice: number = useCryptoPrices(coin.name.toLowerCase()) ?? 0;
 
-  const profitLoss: any = useMemo(() => {
-    return ((livePrice - coin.priceUsd) * coin.amount).toFixed(2);
-  }, [livePrice, coin.priceUsd, coin.amount]);
+  const coinQuantity = coin.quantity ?? 0;
 
-  const totalValue = (coin.amount * livePrice).toFixed(2);
+  const profitLoss: number = useMemo(() => {
+    return Number(
+      ((livePrice - Number(coin.priceUsd)) * coinQuantity).toFixed(2)
+    );
+  }, [livePrice, coin.priceUsd, coin.quantity]);
+
+  const totalValue = (coinQuantity * livePrice).toFixed(2);
 
   return (
     <Paper withBorder p="md" radius="md" key={coin.name}>
@@ -23,7 +33,7 @@ const HoldingCard = ({ coin, handleSellClick }: any) => {
             <Text>{coin.name}</Text>
           </Link>
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-            Quantity: {coin.amount}
+            Quantity: {coinQuantity}
           </Text>
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
             Current Price (USD): ${livePrice}

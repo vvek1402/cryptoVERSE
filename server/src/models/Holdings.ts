@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 
 interface Coin {
   id: string;
-  amount: number;
+  quantity: number;
   priceUsd: number;
   name: string;
   symbol: string;
@@ -15,7 +15,7 @@ interface Holdings extends Document {
 
 const coinSchema = new Schema<Coin>({
   id: { type: String, required: true },
-  amount: { type: Number, required: true },
+  quantity: { type: Number, required: true },
   priceUsd: { type: Number, required: true },
   name: { type: String, required: true },
   symbol: { type: String, required: true },

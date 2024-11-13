@@ -20,7 +20,7 @@ const Balance = () => {
     useBalanceStore();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [amount, setAmount] = useState<any>(1);
+  const [amount, setAmount] = useState<number | string>(1);
   const [actionType, setActionType] = useState<"add" | "withdraw">("add");
 
   useEffect(() => {
@@ -35,16 +35,16 @@ const Balance = () => {
 
   const handleConfirm = () => {
     if (actionType === "add") {
-      addBalance(amount);
+      addBalance(Number(amount));
     } else {
-      withdrawBalance(amount);
+      withdrawBalance(Number(amount));
     }
     setModalOpen(false);
     setAmount(1);
   };
 
   const isWithdrawExceedingBalance =
-    actionType === "withdraw" && amount > balance;
+    actionType === "withdraw" && Number(amount) > balance;
 
   return (
     <>
@@ -128,7 +128,7 @@ const Balance = () => {
             fullWidth
             onClick={handleConfirm}
             color={actionType === "add" ? "teal" : "red"}
-            disabled={isWithdrawExceedingBalance || amount <= 0}
+            disabled={isWithdrawExceedingBalance || Number(amount) <= 0}
             size="md"
             radius="md"
           >
