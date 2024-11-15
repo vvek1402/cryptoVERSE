@@ -10,7 +10,7 @@ const CryptoLanding = () => {
           Cryptocurrency Prices
         </Title>
         <Divider my="lg" />
-        <CryptoTable />
+        <CryptoTable type="crypto" />
       </Layout>
     </>
   );

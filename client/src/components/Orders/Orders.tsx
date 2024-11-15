@@ -18,7 +18,11 @@ const OrdersTable = () => {
     {
       keepPreviousData: true,
       onSuccess: (newData) => {
-        setOrdersLogs((prevData) => [...prevData, ...newData]);
+        if (offset === 0) {
+          setOrdersLogs(newData);
+        } else {
+          setOrdersLogs((prevData) => [...prevData, ...newData]);
+        }
 
         if (newData.length < limit) {
           setMoreData(false);

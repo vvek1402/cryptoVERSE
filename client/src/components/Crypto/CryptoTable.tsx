@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Loader, Center, Text, Input, Button, Anchor } from "@mantine/core";
+import { Loader, Center, Text, Input, Button, Anchor, Title } from "@mantine/core";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { CryptoData, CryptoSelected } from "../../utils/interfaces";
@@ -14,7 +14,7 @@ import { IconBasketPlus, IconBookmark } from "@tabler/icons-react";
 import useWatchlistStore from "../../store/watchlist.store";
 import { notifications } from "@mantine/notifications";
 
-const CryptoTable = ({ ids }: { ids?: string }) => {
+const CryptoTable = ({ ids, type }: { ids?: string, type : "watchlist" | "crypto" }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,7 +49,11 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
       keepPreviousData: true,
       onSuccess: (newData) => {
 
-        setCryptoData((prevData) => [...prevData, ...newData]);
+        if (offset === 0) {
+          setCryptoData(newData);
+        } else {
+          setCryptoData((prevData) => [...prevData, ...newData]);
+        }
 
         if (newData.length < limit) {
           setMoreData(false);
@@ -89,6 +93,12 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
       <Center style={{ height: "100vh" }}>
         <Text color="red">Error fetching data</Text>
       </Center>
+    );
+  }
+
+  if (type == "watchlist" && !ids) {
+    return (
+        <Title ta={"center"} order={2}>No Data Found</Title>
     );
   }
 
@@ -169,7 +179,7 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
         <></>
       )}
 
-      <CommonTable data={cryptoTableData} />
+     <CommonTable data={cryptoTableData} />
 
       <Center mt="20px" display={moreData ? "" : "none"}>
         <Button onClick={loadMore} loading={isFetching}>

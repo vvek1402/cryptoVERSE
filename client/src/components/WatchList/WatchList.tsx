@@ -13,7 +13,7 @@ const Watchlist = () => {
 
   return (
     <>
-      <CryptoTable ids={ids} />
+      <CryptoTable ids={ids} type="watchlist" />
     </>
   );
 };

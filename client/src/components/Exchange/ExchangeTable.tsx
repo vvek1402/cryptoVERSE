@@ -21,7 +21,11 @@ const ExchangeTable = () => {
       keepPreviousData: true,
       onSuccess: (newData) => {
 
-        setExchangeData((prevData) => [...prevData, ...newData]);
+        if (offset === 0) {
+          setExchangeData(newData);
+        } else {
+          setExchangeData((prevData) => [...prevData, ...newData]);
+        }
 
         if (newData.length < 19) {
           setMoreData(false);
