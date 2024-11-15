@@ -1,4 +1,12 @@
-import { Button, Modal, NumberInput, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  Modal,
+  NumberInput,
+  Stack,
+  Text,
+  Group,
+  Divider,
+} from "@mantine/core";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import CoinIcon from "../Common/CoinIcon";
@@ -16,34 +24,40 @@ export default function AddModal({
   selectedCrypto: CryptoSelected;
   setOpened: (bool: boolean) => void;
 }) {
-  const [quantity, setQuantity] = useState<number | string>(0);
+  const [amount, setAmount] = useState<number | string>(0);
   const addCoin = useHoldingsStore((state) => state.addCoin);
   const { balance } = useBalanceStore((state) => state);
 
-  let cyptoLivePrice: number =
+  const cryptoLivePrice: number =
     useCryptoPrices(selectedCrypto.name.toLowerCase()) ?? 0;
-  let totalCost = Number(quantity) * cyptoLivePrice;
-  let isButtonDisabled = balance < totalCost || Number(quantity) <= 0;
+  const quantity = cryptoLivePrice ? Number(amount) / cryptoLivePrice : 0;
+  const isButtonDisabled = balance < Number(amount) || Number(amount) <= 0;
 
   const handlePurchase = () => {
-    if (selectedCrypto && Number(quantity) > 0) {
+    if (selectedCrypto && Number(amount) > 0) {
       addCoin(
         {
           id: selectedCrypto.id,
           name: selectedCrypto.name,
-          quantity:  Number(quantity),
-          priceUsd: Number(cyptoLivePrice).toFixed(2),
+          quantity: quantity,
+          priceUsd: Number(cryptoLivePrice).toFixed(2),
           symbol: selectedCrypto.symbol,
+          amountInvested: Number(amount),
         },
-        totalCost
+        Number(amount)
       );
       setOpened(false);
-      setQuantity(0);
+      setAmount(0);
       notifications.show({
         title: "Success !!",
         message: "Coin Added Successfully",
       });
     }
+  };
+
+  const setInvestmentPercentage = (percentage: number) => {
+    const investAmount = (balance * percentage) / 100;
+    setAmount(investAmount);
   };
 
   return (
@@ -60,27 +74,48 @@ export default function AddModal({
         <Stack align="center">
           <CoinIcon src={selectedCrypto?.symbol} alt={selectedCrypto?.name} />
           <Text style={{ fontSize: "18px", fontWeight: 500 }}>
-            Price: ${cyptoLivePrice}
+            Price: ${cryptoLivePrice}
           </Text>
         </Stack>
 
+        <Divider />
 
         <NumberInput
-          defaultValue={quantity}
-          onChange={setQuantity}
-          placeholder="Enter quantity"
-          max={10000}
+          value={amount}
+          onChange={setAmount}
+          placeholder="Enter amount"
+          max={balance}
+          hideControls
           min={0}
           styles={{
             input: { height: "48px", fontSize: "16px", padding: "12px" },
           }}
         />
         <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+          Quantity: {quantity.toFixed(6)}
+        </Text>
+
+        <Divider />
+
+        <Text style={{ fontSize: "16px", fontWeight: 500 }}>
           Available Balance: ${balance}
         </Text>
+
         <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-          Required Balance: ${totalCost}
+          Amount to invested:
         </Text>
+        <Group p="apart">
+          {[10, 25, 50, 100].map((percentage) => (
+            <Button
+              key={percentage}
+              variant="outline"
+              onClick={() => setInvestmentPercentage(percentage)}
+            >
+              {percentage}%
+            </Button>
+          ))}
+        </Group>
+        <Divider />
 
         <Button
           fullWidth

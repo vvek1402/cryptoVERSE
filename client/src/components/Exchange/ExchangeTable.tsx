@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Loader, Center, Text, Button } from "@mantine/core";
+import { Loader, Center, Text, Button, Anchor } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { ExchangeData } from "../../utils/interfaces";
@@ -20,11 +20,8 @@ const ExchangeTable = () => {
     {
       keepPreviousData: true,
       onSuccess: (newData) => {
-        if (offset === 0) {
-          setExchangeData(newData);
-        } else {
-          setExchangeData((prevData) => [...prevData, ...newData]);
-        }
+
+        setExchangeData((prevData) => [...prevData, ...newData]);
 
         if (newData.length < 19) {
           setMoreData(false);
@@ -57,7 +54,7 @@ const ExchangeTable = () => {
     head: ["Rank", "Name", "Trading Pairs", "Volume (24H)", "Total %"],
     body: exchangeData.map((exchange) => [
       exchange.rank,
-      <Link to={`${exchange.exchangeUrl}`}>{exchange.name}</Link>,
+      <Anchor component={Link} to={`${exchange.exchangeUrl}`}>{exchange.name}</Anchor>,
       exchange.tradingPairs,
       formatValueToUsd(exchange.volumeUsd),
       formatValueTwoDigit(exchange.percentTotalVolume) + "%",

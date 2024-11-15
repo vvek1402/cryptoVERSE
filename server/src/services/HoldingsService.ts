@@ -3,7 +3,7 @@ import { Orders } from "../models/Orders";
 
 export const addCoinToHoldings = async (
   userId: string | undefined,
-  coin: { id: string; quantity: number; priceUsd: number; name: string; symbol: string }
+  coin: { id: string; quantity: number; priceUsd: number; name: string; symbol: string; amountInvested : number }
 ) => {
   const holdings = await Holdings.findOne({ userId });
 

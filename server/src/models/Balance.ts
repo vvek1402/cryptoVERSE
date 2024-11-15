@@ -1,10 +1,5 @@
-import { Schema, model, Document } from "mongoose";
-
-interface IBalance extends Document {
-  userId: Schema.Types.ObjectId;
-  balance: number;
-  updatedAt: Date;
-}
+import { Schema, model } from "mongoose";
+import { IBalance } from "../utils/interfaces";
 
 const balanceSchema = new Schema<IBalance>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

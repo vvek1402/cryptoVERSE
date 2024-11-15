@@ -1,4 +1,3 @@
-import { ThemeProviderProps } from "@emotion/react";
 import { MantineThemeOverride } from "@mantine/core";
 
 const theme: MantineThemeOverride = {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Loader, Center, Text, Input, Button } from "@mantine/core";
+import { Loader, Center, Text, Input, Button, Anchor } from "@mantine/core";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { formatValueToUsd, formatValueTwoDigit } from "../../utils/helpers";
 import { CryptoData, CryptoSelected } from "../../utils/interfaces";
@@ -48,11 +48,8 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
     {
       keepPreviousData: true,
       onSuccess: (newData) => {
-        if (offset === 0) {
-          setCryptoData(newData);
-        } else {
-          setCryptoData((prevData) => [...prevData, ...newData]);
-        }
+
+        setCryptoData((prevData) => [...prevData, ...newData]);
 
         if (newData.length < limit) {
           setMoreData(false);
@@ -110,7 +107,7 @@ const CryptoTable = ({ ids }: { ids?: string }) => {
     body: cryptoData?.map((crypto) => [
       crypto.rank,
       <CoinIcon src={crypto.symbol} alt={crypto.name} />,
-      <Link to={`/details/${crypto.id}`}>{crypto.name}</Link>,
+      <Anchor component={Link} to={`/details/${crypto.id}`}>{crypto.name}</Anchor>,
       formatValueToUsd(crypto.supply),
       crypto.maxSupply ? formatValueToUsd(crypto.maxSupply) : "N/A",
       formatValueToUsd(crypto.marketCapUsd),

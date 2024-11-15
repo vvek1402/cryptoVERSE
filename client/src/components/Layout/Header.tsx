@@ -8,6 +8,7 @@ import {
   ScrollArea,
   Text,
   Flex,
+  Anchor,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
@@ -34,7 +35,8 @@ export function Header() {
   const { balance } = useBalanceStore((state) => state);
 
   const items = links.map((link) => (
-    <Link
+    <Anchor
+      component={Link}
       key={link.label}
       to={link.link}
       className={`link ${location.pathname == link.link ? "active" : ""}`}
@@ -52,16 +54,16 @@ export function Header() {
       ) : (
         <Text fw={800}>{link.label}</Text>
       )}
-    </Link>
+    </Anchor>
   ));
 
   return (
     <header className="header">
       <Container fluid className="inner">
         <div className="logo">
-          <Link to="/" className="logoText">
+          <Anchor component={Link} to="/" className="logoText">
             CryptoVERSE
-          </Link>
+          </Anchor>
         </div>
 
         <Group className="linksContainer desktopLinks">{items}</Group>

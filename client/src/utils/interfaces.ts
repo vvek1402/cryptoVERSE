@@ -54,6 +54,7 @@ export interface CryptoSelected {
   priceUsd: string;
   id: string;
   quantity?: number;
+  amountInvested? : number;
 }
 
 export interface HoldingsState {

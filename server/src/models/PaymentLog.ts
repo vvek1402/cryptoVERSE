@@ -1,10 +1,6 @@
 import { Schema, model, Document } from "mongoose";
+import { IPaymentLog } from "../utils/interfaces";
 
-interface IPaymentLog extends Document {
-  userId: Schema.Types.ObjectId;
-  addedAmount: number;
-  createdAt: Date;
-}
 
 const paymentLogSchema = new Schema<IPaymentLog>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

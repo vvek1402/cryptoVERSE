@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Paper, Text, Stack, Button } from "@mantine/core";
+import { Paper, Text, Stack, Button, Anchor, Divider } from "@mantine/core";
 import CoinIcon from "../Common/CoinIcon";
 import { useCryptoPrices } from "../../utils/helpers";
 import { Link } from "react-router-dom";
@@ -28,19 +28,22 @@ const HoldingCard = ({
     <Paper withBorder p="md" radius="md" key={coin.name}>
       <Stack m="sm">
         <Stack align="center">
-          <Link to={`/details/${coin.id}`}>
+          <Anchor component={Link} to={`/details/${coin.id}`}>
             <CoinIcon src={coin?.symbol} alt={coin?.name} />
             <Text>{coin.name}</Text>
-          </Link>
+          </Anchor>
+          <Text style={{ fontSize: "16px", fontWeight: 500 }}>
+            Price : ${livePrice}
+          </Text>
+          <Divider style={{ width: "100%" }} />
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
             Quantity: {coinQuantity}
           </Text>
+
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-            Current Price (USD): ${livePrice}
+            Purchase Price : ${coin.priceUsd}
           </Text>
-          <Text style={{ fontSize: "16px", fontWeight: 500 }}>
-            Purchase Price (USD): ${coin.priceUsd}
-          </Text>
+          <Divider style={{ width: "100%" }} />
           <Text style={{ fontSize: "16px", fontWeight: 500 }}>
             Total Value: ${totalValue}
           </Text>
@@ -54,12 +57,7 @@ const HoldingCard = ({
             Profit/Loss: ${profitLoss}
           </Text>
         </Stack>
-        <Button
-          color="red"
-          fullWidth
-          mt="md"
-          onClick={() => handleSellClick(coin)}
-        >
+        <Button color="red" fullWidth onClick={() => handleSellClick(coin)}>
           Sell
         </Button>
       </Stack>

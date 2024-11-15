@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IOrder } from "src/utils/interfaces";
 
-// Define the Order schema
 const orderSchema = new Schema(
   {
     userId: { type: String, required: true },
@@ -14,16 +14,5 @@ const orderSchema = new Schema(
   },
   { timestamps: true }
 );
-
-interface IOrder extends Document {
-  userId: string;
-  coinId: string;
-  coinName: string;
-  quantity: number;
-  price: number;
-  orderType: "buy" | "sell";
-  totalPrice: number;
-  date: Date;
-}
 
 export const Orders = mongoose.model<IOrder>("Order", orderSchema);

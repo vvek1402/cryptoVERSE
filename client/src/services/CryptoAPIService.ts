@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://api.coincap.io/v2/";
+const API_URL = import.meta.env.VITE_API_CRYPTO_URL;
 
 export const fetchCryptoData = async ({
   queryKey,

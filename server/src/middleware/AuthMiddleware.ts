@@ -1,21 +1,28 @@
 import { Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { handleErrorResponse } from "../utils/helpers";
 import { CustomRequest } from "../utils/interfaces";
 
 const Authenticate = (req: CustomRequest, res: Response, next: NextFunction): void => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return handleErrorResponse(res, 401, "Unauthorized");
-
-  jwt.verify(token, process.env.TOKEN_KEY!, (err, decoded) => {
-    if (err) {
-      console.log(err)
-      return res.status(401).json({ message: "Invalid token" });
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return handleErrorResponse(res, 401, "Unauthorized");
     }
 
-    req.userid = (decoded as { user_id: string }).user_id;
-    next();
-  });
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.TOKEN_KEY!, (err, decoded) => {
+      if (err) {
+        console.error("Token verification error:", err);
+        return handleErrorResponse(res, 401, "Invalid token");
+      }
+
+      req.userid = (decoded as JwtPayload).user_id;
+      next();
+    });
+  } catch (error) {
+    console.error("Authentication error:", error);
+  }
 };
 
 export default Authenticate;
